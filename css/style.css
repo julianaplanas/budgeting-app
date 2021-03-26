@@ -22,6 +22,7 @@
 
 .navbar{
     padding: 30px;
+    margin-bottom: 100px;
 }
 
 .navbar, .navbar a{
@@ -57,4 +58,17 @@
 
 .display{
     display: none;
+}
+
+/* CATEGORIAS STYLE */
+
+.subtitle{
+    font-size: var(--sizeMiddle);
+    font-weight: var(--weightTitle);
+}
+
+.add-category{
+    background-color: var(--colorDetails);
+    color: var(--colorText);
+    font-weight: var(--weightText);
 }
