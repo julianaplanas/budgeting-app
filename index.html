@@ -10,11 +10,71 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+
     <!-- Style links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     
+    <!-- START NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <!-- Title -->
+          <a class="navbar-item" href="#">
+            <span class="icon-text">
+                <span class="icon brand-logo">
+                    <i class="fas fa-wallet"></i>
+                </span>
+                <span class="brand-title">AhorrADAs</span>
+            </span>
+          </a>
+
+          <!-- Burger nav -->
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      
+        <div id="navbar" class="navbar-menu">
+          <div class="navbar-end">
+              <!-- Balance button -->
+            <a class="navbar-item nav-button">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-chart-line"></i>
+                    </span>
+                    <span>Balance</span>
+                </span>
+            </a>
+      
+            <!-- Categorías button -->
+            <a class="navbar-item nav-button">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-tag"></i>
+                    </span>
+                    <span>Categorías</span>
+                </span>
+            </a>
+            
+            <!-- Reportes button -->
+            <a class="navbar-item nav-button">
+                <span class="icon-text">
+                    <span class="icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </span>
+                    <span>Reportes</span>
+                </span>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <!-- END OF NAVBAR -->
 
     <script src="js/app.js"></script>
 </body>

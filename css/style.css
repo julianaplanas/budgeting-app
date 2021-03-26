@@ -1,7 +1,7 @@
 :root{
     --fontText: 'Quicksand', sans-serif;
     --sizeText: 1em;
-    --sizeSubtitle: 2em;
+    --sizeSubtitle: 1.5em;
     --sizeMiddle: 2.5em;
     --sizeTitle: 3em;
     --weightText: 400;
@@ -14,3 +14,43 @@
     --colorGanancias: green;
 }
 
+*{
+    font-style: var(--fontText);
+}
+
+/* NAVBAR */
+
+.navbar{
+    padding: 30px;
+}
+
+.navbar, .navbar a{
+    background-color: var(--colorBackground);
+    color: var(--colorText);
+}
+
+.brand-title, .brand-logo i{
+    font-weight: var(--weightTitle);
+    font-size: var(--sizeTitle);
+}
+
+.nav-button{
+    font-size: var(--sizeSubtitle);
+    font-weight: var(--weightTitle);
+}
+
+.brand-logo{
+    margin: 0 10px;
+}
+
+.brand-title{
+    margin-left: 15px;
+}
+
+.navbar a:hover{
+    color: var(--colorBox);
+}
+
+.navbar-end a:hover{
+    border-radius: 10px;
+}
