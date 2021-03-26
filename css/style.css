@@ -1,0 +1,16 @@
+:root{
+    --fontText: 'Quicksand', sans-serif;
+    --sizeText: 1em;
+    --sizeSubtitle: 2em;
+    --sizeMiddle: 2.5em;
+    --sizeTitle: 3em;
+    --weightText: 400;
+    --weightTitle: 700;
+    --colorText: #fff;
+    --colorBackground: #9754C9;
+    --colorBox: #432860;
+    --colorDetails: #884DC0;
+    --colorGastos: red;
+    --colorGanancias: green;
+}
+
