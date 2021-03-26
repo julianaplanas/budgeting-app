@@ -54,3 +54,7 @@
 .navbar-end a:hover{
     border-radius: 10px;
 }
+
+.display{
+    display: none;
+}

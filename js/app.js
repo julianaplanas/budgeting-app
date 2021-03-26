@@ -22,4 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
     }
-  });
+});
+
+// NAVBAR BUTTONS
+
+const btnBalance = document.getElementById('btnBalance');
+const btnCategorias = document.getElementById('btnCategorias');
+const btnReportes = document.getElementById('btnReportes');
+
+const balanceSection = document.getElementById('balanceSection');
+const categoriasSection = document.getElementById('categoriasSection');
+const reportesSection = document.getElementById('reportesSection');
+
+btnBalance.addEventListener('click', ()=>{
+    balanceSection.style.display = 'block';
+    categoriasSection.style.display = 'none';
+    reportesSection.style.display = 'none';
+})
+
+btnCategorias.addEventListener('click', () =>{
+    balanceSection.style.display = 'none';
+    categoriasSection.style.display = 'block';
+    reportesSection.style.display = 'none';
+})
+
+btnReportes.addEventListener('click', ()=>{
+    balanceSection.style.display = 'none';
+    categoriasSection.style.display = 'none';
+    reportesSection.style.display = 'block';
+})
