@@ -112,8 +112,8 @@
                 <div class="control ">
                   <div class="select is-fullwidth">
                     <select id="tipo">
-                      <option>Gasto</option>
-                      <option>Ganancia</option>
+                      <option value="expense">Gasto</option>
+                      <option value="gain">Ganancia</option>
                     </select>
                   </div>
                 </div>
@@ -143,12 +143,12 @@
               <!-- Buttons -->
               <div class="field is-grouped is-grouped-right new-op-buttons">
                 <p class="control">
-                  <a class="button is-light">
+                  <a class="button is-light" id="cancelNewOperation">
                     Cancelar
                   </a>
                 </p>
                 <p class="control">
-                  <a class="button add-new-op-button">
+                  <a class="button add-new-op-button" id="acceptNewOperation">
                     Agregar
                   </a>
                 </p>
