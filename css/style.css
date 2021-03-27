@@ -72,3 +72,14 @@
     color: var(--colorText);
     font-weight: var(--weightText);
 }
+
+/* NEW OPERATION STYLE */
+
+.new-op-buttons{
+    margin-top: 50px;
+}
+
+.add-new-op-button{
+    background-color: var(--colorDetails);
+    color: var(--colorText);
+}

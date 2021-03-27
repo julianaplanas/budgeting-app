@@ -77,14 +77,82 @@
       <!-- END OF NAVBAR -->
 
       <!-- START OF BALANCES -->
-      <section class="container" id="balanceSection">
+      <section class="container display" id="balanceSection">
         <h1>Balance</h1>
       </section>
       <!-- END OF BALANCES -->
 
       <!-- START OF NUEVA OPERACION -->
-      <section class="container display">
+      <section class="container">
+        <div class="columns">
+          <div class="column is-8 is-offset-2">
+            <div class="box">
+              <!-- Subtitle -->
+              <h2 class="subtitle">Nueva operación</h2>
 
+              <!-- Descripcion input -->
+              <div class="field">
+                <label for="descripcion" class="label">Descripción</label>
+                <div class="control">
+                  <input id="descripcion" class="input" type="text">
+                </div>
+              </div>
+
+              <!-- Monto input -->
+              <div class="field">
+                <label for="monto" class="label">Monto</label>
+                <div class="control">
+                  <input id="monto" class="input" type="number" value="0">
+                </div>
+              </div>
+
+              <!-- Tipo select -->
+              <div class="field">
+                <label for="tipo" class="label">Tipo</label>
+                <div class="control ">
+                  <div class="select is-fullwidth">
+                    <select id="tipo">
+                      <option>Gasto</option>
+                      <option>Ganancia</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Categoria select -->
+              <div class="field">
+                <label for="categoria" class="label">Categoría</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="categoria">
+                      <!-- <option>Educación</option>
+                      <option>Trabajo</option> -->
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fecha select -->
+              <div class="field">
+                <label for="fecha-input" class="label">Fecha</label>
+                <div class="control is-fullwidth">
+                  <input id="fecha-input" class="input" type="date">
+                </div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="field is-grouped is-grouped-right new-op-buttons">
+                <p class="control">
+                  <a class="button is-light">
+                    Cancelar
+                  </a>
+                </p>
+                <p class="control">
+                  <a class="button add-new-op-button">
+                    Agregar
+                  </a>
+                </p>
+              </div>
       </section>
       <!-- END OF NUEVA OPERACION -->
 
