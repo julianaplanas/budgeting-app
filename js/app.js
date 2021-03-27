@@ -51,3 +51,12 @@ btnReportes.addEventListener('click', ()=>{
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'block';
 })
+
+// NEW OPERATION: DATE INPUT
+
+const fechaInput = document.getElementById('fecha-input');
+
+const day = new Date().getDate();
+const month = new Date().getMonth() + 1;
+const year = new Date().getFullYear();
+fechaInput.value = `${year}-${month < 10 ? '0' + month: month}-${day}`
