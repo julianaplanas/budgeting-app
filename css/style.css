@@ -2,7 +2,7 @@
     --fontText: 'Quicksand', sans-serif;
     --sizeText: 1em;
     --sizeSubtitle: 1.5em;
-    --sizeMiddle: 2.5em;
+    --sizeMiddle: 2.3em;
     --sizeTitle: 3em;
     --weightText: 400;
     --weightTitle: 700;
@@ -15,14 +15,13 @@
 }
 
 *{
-    font-style: var(--fontText);
+    font-family: var(--fontText);
 }
 
 /* NAVBAR */
 
 .navbar{
     padding: 30px;
-    margin-bottom: 100px;
 }
 
 .navbar, .navbar a{
@@ -76,10 +75,28 @@
 /* NEW OPERATION STYLE */
 
 .new-op-buttons{
+    font-family: var(--fontText);
     margin-top: 50px;
 }
 
 .add-new-op-button{
+    font-family: var(--fontText);
     background-color: var(--colorDetails);
     color: var(--colorText);
+}
+
+/* BALANCE */
+
+.section-name{
+    font-size: var(--sizeMiddle);
+}
+
+/* Filters */ 
+
+label {
+    color: #363636;
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: .5em;
 }
