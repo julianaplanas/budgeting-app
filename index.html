@@ -79,8 +79,8 @@
       <!-- START OF BALANCES -->
       <section class="section mt-5 vista" id="balanceSection">
         <div class="container">
-          <div class="column is-multiline">
-            <div class="column is-3-widescreen is-4-desktop is-12-tablet">
+          <div class="columns is-multiline">
+            <div class="column is-3-widescreen is-4-desktop is-12-tablet is-offset-1-widescreen">
 
               <!-- Balance box -->
               <div class="box">
@@ -103,7 +103,7 @@
               <div class="box">
                 <div class="columns is-mobile">
                   <div class="column">
-                    <h3 class="is-size-4 has-text-weight-bold mb-6">Filtros</h3>
+                    <h3 class="is-size-4 has-text-weight-bold mb-2">Filtros</h3>
                   </div>
                   <div class="column has-text-right">
                     <a href="#" id="toggle-filters">Ocultar filtros</a>
@@ -155,20 +155,18 @@
                 </div>
               </div>
             </div>
-
-                </div>
-              </div>
-            </div>
-
+          </div>
+        </div>
+      </div>
             <!-- Operations box -->
             <div class="column is-7-widescreen is-8-desktop">
               <div class="box" operations-container>
                 <div class="columns mb-4">
                   <div class="column">
-                    <h3 class="is-size-4 has-text-weight-bold mb-6">Balance</h3>
+                    <h3 class="is-size-4 has-text-weight-bold mb-2">Operaciones</h3>
                   </div>
                   <div class="column has-text-right-tablet">
-                    <button type="button" class="button is-primary" id="new-operation">+ Nueva operación</button>
+                    <button type="button" class="button new-operation" id="new-operation">+ Nueva operación</button>
                   </div>
                 </div>
               </div>
@@ -271,7 +269,6 @@
                           </a>
                         </p>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -279,8 +276,27 @@
       <!-- END OF CATEGORIAS -->
 
       <!-- START OF REPORTES  -->
-      <section class="container display" id="reportesSection">
-        <h1>Reportes</h1>
+      <section class="section mt-5 vista" id="reportesSection">
+        <div class="container">
+          <div class="columns">
+            <div class="column is-8-widescreen is-10-desktop is-offset-2-widescreen is-offset-1-desktop">
+              <div class="box">
+                <h1 class="subtitle">Reportes</h1>
+                <div id="no-reports">
+                  <div class="my-6 py-6">
+                    <figure class="image"> 
+                      <img src="./assets/img/money1.png" alt="">
+                    </figure>
+                    <h4 class="is-size-4 has-text-centered mt-6 mb-4 has-text-weight-semibold">Operaciones insuficientes</h4>
+                    <p class="has-text-centered">Prueba agregando más operaciones</p>
+                  </div>
+                </div>
+                <div id="with-reports">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
       <!-- END OF REPORTES  -->
 

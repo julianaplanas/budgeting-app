@@ -100,3 +100,14 @@ label {
     font-weight: 600;
     margin-bottom: .5em;
 }
+
+/* Operations */
+
+button {
+    font-family: var(--fontText);
+}
+
+.new-operation {
+    background-color: var(--colorDetails);
+    color: #fff;
+}
