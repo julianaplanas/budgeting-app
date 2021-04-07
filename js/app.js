@@ -62,7 +62,11 @@ const dateInput = document.getElementById('date-input');
 const day = new Date().getDate();
 const month = new Date().getMonth() + 1;
 const year = new Date().getFullYear();
-dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day}`
+
+// dateInput.value = '2021/07/04';
+const setTodayDate = () =>{
+  dateInput.value = `${year}/${month < 10 ? '0' + month: month}/${day < 10 ? '0' + day: day}`;
+}
 
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
@@ -72,13 +76,14 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
-    newOperationSection.style.display = 'block';
-    balanceSection.style.display = 'none';
+  setTodayDate();
+  newOperationSection.style.display = 'block';
+  balanceSection.style.display = 'none';
 })
 
 btnCancelNewOperation.addEventListener('click', ()=>{
-    newOperationSection.style.display = 'none';
-    balanceSection.style.display = 'block';
+  newOperationSection.style.display = 'none';
+  balanceSection.style.display = 'block';
 })
 
 // NEW OPERATION: ADD NEW OPERATION
@@ -95,17 +100,26 @@ const amount = document.getElementById('amount');
 const type = document.getElementById('type');
 const category = document.getElementById('category');
 
+const clearOperations = () =>{
+  description.value = '';
+  amount.value = 0;
+  type.value = 'Gasto';
+  category.value = '';
+  setTodayDate();
+}
+
 const printOperations = (operations)=>{
-  withOperations.innerHTML = '';
+  // withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
-      const codeBox = `<div id="${operations[i].id}">
-          <span>${operations[i].description}</span> 
-          <span>${operations[i].amount}</span> 
-          <span>${operations[i].type}</span> 
-          <span>${operations[i].category}</span> 
-          <span>${operations[i].date}</span>
-          <a>Editar</a>
-          <a>Eliminar</a>
+      const codeBox = `<div id="${operations[i].id}" class="columns">
+          <div class="column is-3">${operations[i].description}</div> 
+          <div class="column is-3">${operations[i].category}</div> 
+          <div class="column is-2 has-text-right">${operations[i].date}</div>
+          <div class="column is-2 has-text-right">${operations[i].amount}</div> 
+          <div class="column is-2 has-text-right">
+            <a class="edit-op">Editar</a>
+            <a class="delete-op">Eliminar</a>
+          </div> 
       </div>`
       withOperations.insertAdjacentHTML('beforeend', codeBox)
   }
@@ -113,7 +127,7 @@ const printOperations = (operations)=>{
 
 btnAcceptNewOperation.addEventListener('click', ()=>{
   const newOp = {
-      id: uuid.v4(), //para darle un id dinamico a partir de la libreria uuid
+      id: uuid.v4(),
       description: description.value,
       amount: amount.value,
       type: type.value,
@@ -125,8 +139,9 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
   const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
   printOperations(operationsLocalStorage);
 
-  withOperations.style.display = 'block';
-  noOperations.style.display = 'none';
+  clearOperations();
   newOperationSection.style.display = 'none';
   balanceSection.style.display = 'block';
+  noOperations.style.display = 'none';
+  withOperations.style.display = 'block';
 })

@@ -85,6 +85,10 @@
     color: var(--colorText);
 }
 
+.edit-op, .delete-op{
+    font-size: 0.8rem;
+}
+
 /* BALANCE */
 
 .section-name{
