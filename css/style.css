@@ -85,10 +85,6 @@
     color: var(--colorText);
 }
 
-.edit-op, .delete-op{
-    font-size: 0.8rem;
-}
-
 /* BALANCE */
 
 .section-name{
@@ -114,4 +110,29 @@ button {
 .new-operation {
     background-color: var(--colorDetails);
     color: #fff;
+}
+
+.description-style{
+    font-weight: 800;
+}
+
+.category-style{
+    border: none;
+    /* background-color: lightgreen; */
+    color: var(--colorGanancias);
+    font-size: 0.8rem;
+}
+
+.edit-op, .delete-op{
+    font-size: 0.8rem;
+}
+
+.win-style{
+    color: var(--colorGanancias);
+    font-weight: 800;
+}
+
+.loose-style{
+    color: var(--colorGastos);
+    font-weight: 800;
 }

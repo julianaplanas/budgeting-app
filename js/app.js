@@ -93,12 +93,14 @@ const noOperations = document.getElementById('no-operations');
 
 const btnAcceptNewOperation = document.getElementById('acceptNewOperation');
 
-const operations = [];
+let operations = [];
 
 const description = document.getElementById('description');
 const amount = document.getElementById('amount');
 const type = document.getElementById('type');
 const category = document.getElementById('category');
+
+let amountStyle;
 
 const clearOperations = () =>{
   description.value = '';
@@ -112,10 +114,10 @@ const printOperations = (operations)=>{
   // withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
       const codeBox = `<div id="${operations[i].id}" class="columns">
-          <div class="column is-3">${operations[i].description}</div> 
-          <div class="column is-3">${operations[i].category}</div> 
+          <div class="column is-3 description-style">${operations[i].description}</div> 
+          <div class="column is-3 category-style">${operations[i].category}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
-          <div class="column is-2 has-text-right">${operations[i].amount}</div> 
+          <div class="column is-2 has-text-right">${operations[i].amount}</div>
           <div class="column is-2 has-text-right">
             <a class="edit-op">Editar</a>
             <a class="delete-op">Eliminar</a>
@@ -124,6 +126,19 @@ const printOperations = (operations)=>{
       withOperations.insertAdjacentHTML('beforeend', codeBox)
   }
 }
+
+// const winOrLoose = (operations) =>{
+//   // for (let i = 0; i < operations.length; i++) {
+//     if(type.value === 'Gasto'){
+//       amountStyle = `<div class="column is-2 has-text-right loose-style"> -${operations[i].amount}</div>`
+//     } else if(type.value === 'Ganancia'){
+//       amountStyle = `<div class="column is-2 has-text-right win-style"> +${operations[i].amount}</div>`
+//     }
+//   // }
+//   return amountStyle
+// }
+
+// console.log(amountStyle)
 
 btnAcceptNewOperation.addEventListener('click', ()=>{
   const newOp = {
