@@ -38,25 +38,125 @@ btnBalance.addEventListener('click', ()=>{
     balanceSection.style.display = 'block';
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'none';
+    newOperationSection.style.display = 'none';
 })
 
 btnCategorias.addEventListener('click', () =>{
     balanceSection.style.display = 'none';
     categoriasSection.style.display = 'block';
     reportesSection.style.display = 'none';
+    newOperationSection.style.display = 'none';
 })
 
 btnReportes.addEventListener('click', ()=>{
     balanceSection.style.display = 'none';
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'block';
+    newOperationSection.style.display = 'none';
 })
 
 // NEW OPERATION: DATE INPUT
 
-const fechaInput = document.getElementById('fecha-input');
+const dateInput = document.getElementById('date-input');
 
 const day = new Date().getDate();
 const month = new Date().getMonth() + 1;
 const year = new Date().getFullYear();
-fechaInput.value = `${year}-${month < 10 ? '0' + month: month}-${day}`
+
+// dateInput.value = '2021/07/04';
+const setTodayDate = () =>{
+  dateInput.value = `${year}/${month < 10 ? '0' + month: month}/${day < 10 ? '0' + day: day}`;
+}
+
+// NEW OPERATION: OPEN FORM AND CLOSE FORM
+
+const btnNewOperation = document.getElementById('new-operation');
+const btnCancelNewOperation = document.getElementById('cancelNewOperation');
+
+const newOperationSection = document.getElementById('newOperationSection');
+
+btnNewOperation.addEventListener('click', ()=>{
+  setTodayDate();
+  newOperationSection.style.display = 'block';
+  balanceSection.style.display = 'none';
+})
+
+btnCancelNewOperation.addEventListener('click', ()=>{
+  newOperationSection.style.display = 'none';
+  balanceSection.style.display = 'block';
+})
+
+// NEW OPERATION: ADD NEW OPERATION
+
+const withOperations = document.getElementById('with-operations');
+const noOperations = document.getElementById('no-operations');
+
+const btnAcceptNewOperation = document.getElementById('acceptNewOperation');
+
+let operations = [];
+
+const description = document.getElementById('description');
+const amount = document.getElementById('amount');
+const type = document.getElementById('type');
+const category = document.getElementById('category');
+
+let amountStyle;
+
+const clearOperations = () =>{
+  description.value = '';
+  amount.value = 0;
+  type.value = 'Gasto';
+  category.value = '';
+  setTodayDate();
+}
+
+const printOperations = (operations)=>{
+  // withOperations.innerHTML = '';
+  for (let i = 0; i < operations.length; i++) {
+      const codeBox = `<div id="${operations[i].id}" class="columns">
+          <div class="column is-3 description-style">${operations[i].description}</div> 
+          <div class="column is-3 category-style">${operations[i].category}</div>
+          <div class="column is-2 has-text-right">${operations[i].date}</div>
+          <div class="column is-2 has-text-right">${operations[i].amount}</div>
+          <div class="column is-2 has-text-right">
+            <a class="edit-op">Editar</a>
+            <a class="delete-op">Eliminar</a>
+          </div> 
+      </div>`
+      withOperations.insertAdjacentHTML('beforeend', codeBox)
+  }
+}
+
+// const winOrLoose = (operations) =>{
+//   // for (let i = 0; i < operations.length; i++) {
+//     if(type.value === 'Gasto'){
+//       amountStyle = `<div class="column is-2 has-text-right loose-style"> -${operations[i].amount}</div>`
+//     } else if(type.value === 'Ganancia'){
+//       amountStyle = `<div class="column is-2 has-text-right win-style"> +${operations[i].amount}</div>`
+//     }
+//   // }
+//   return amountStyle
+// }
+
+// console.log(amountStyle)
+
+btnAcceptNewOperation.addEventListener('click', ()=>{
+  const newOp = {
+      id: uuid.v4(),
+      description: description.value,
+      amount: amount.value,
+      type: type.value,
+      category: category.value,
+      date: dateInput.value
+  }
+  operations.push(newOp);
+  localStorage.setItem('operations', JSON.stringify(operations));
+  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+  printOperations(operationsLocalStorage);
+
+  clearOperations();
+  newOperationSection.style.display = 'none';
+  balanceSection.style.display = 'block';
+  noOperations.style.display = 'none';
+  withOperations.style.display = 'block';
+})

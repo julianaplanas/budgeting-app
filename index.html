@@ -161,7 +161,7 @@
 
             <!-- Operations box -->
             <div class="column is-7-widescreen is-8-desktop">
-              <div class="box" operations-container>
+              <div class="box operations-container">
                 <div class="columns mb-4">
                   <div class="column">
                     <h3 class="is-size-4 has-text-weight-bold mb-2">Operaciones</h3>
@@ -170,7 +170,14 @@
                     <button type="button" class="button new-operation" id="new-operation">+ Nueva operación</button>
                   </div>
                 </div>
-                  <div id="with-operations">
+                  <div id="with-operations" class="display">
+                    <div class="columns has-text-weight-semibold is-hidden-mobile">
+                      <div class="column is-3">Descripción</div>
+                      <div class="column is-3">Categoría</div>
+                      <div class="column is-2 has-text-right">Fecha</div>
+                      <div class="column is-2 has-text-right">Monto</div>
+                      <div class="column is-2 has-text-right">Acciones</div>
+                    </div>
                   </div>
                   <div id="no-operations" class="my-6 py-6">
                     <figure class="image"> 
@@ -199,7 +206,7 @@
               <div class="field">
                 <label for="descripcion" class="label">Descripción</label>
                 <div class="control">
-                  <input id="descripcion" class="input" type="text">
+                  <input id="description" class="input" type="text">
                 </div>
               </div>
 
@@ -207,7 +214,7 @@
               <div class="field">
                 <label for="monto" class="label">Monto</label>
                 <div class="control">
-                  <input id="monto" class="input" type="number" value="0">
+                  <input id="amount" class="input" type="number" value="0">
                 </div>
               </div>
 
@@ -216,7 +223,7 @@
                 <label for="tipo" class="label">Tipo</label>
                 <div class="control ">
                   <div class="select is-fullwidth">
-                    <select id="tipo">
+                    <select id="type">
                       <option value="expense">Gasto</option>
                       <option value="gain">Ganancia</option>
                     </select>
@@ -229,7 +236,7 @@
                 <label for="categoria" class="label">Categoría</label>
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select id="categoria">
+                    <select id="category">
                       <!-- <option>Educación</option>
                       <option>Trabajo</option> -->
                     </select>
@@ -239,9 +246,9 @@
 
               <!-- Fecha select -->
               <div class="field">
-                <label for="fecha-input" class="label">Fecha</label>
+                <label for="date-input" class="label">Fecha</label>
                 <div class="control is-fullwidth">
-                  <input id="fecha-input" class="input" type="date">
+                  <input id="date-input" class="input" type="date">
                 </div>
               </div>
 
@@ -314,6 +321,7 @@
       </section>
       <!-- END OF REPORTES  -->
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.7/uuid.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
