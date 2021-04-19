@@ -168,11 +168,11 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
 
 // Start with all operations of local Storage
 if(JSON.parse(localStorage.getItem('operations')) === null){
-  withOperations.classList.add = 'display';
-  noOperations.classList.remove = 'display';
+  withOperations.classList.add('display');
+  noOperations.classList.remove('display');
 } else{
-  withOperations.classList.remove = 'display';
-  noOperations.classList.add = 'display';
+  withOperations.classList.remove('display');
+  noOperations.classList.add('display');
   operations = JSON.parse(localStorage.getItem('operations'));
   printOperations(operations);
 }
