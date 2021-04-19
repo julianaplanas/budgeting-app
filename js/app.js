@@ -1,5 +1,4 @@
 // BURGER NAVBAR
-
 document.addEventListener('DOMContentLoaded', () => {
     // Get all "navbar-burger" elements
     const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // NAVBAR BUTTONS
-
 const btnBalance = document.getElementById('btnBalance');
 const btnCategorias = document.getElementById('btnCategorias');
 const btnReportes = document.getElementById('btnReportes');
@@ -56,17 +54,19 @@ btnReportes.addEventListener('click', ()=>{
 })
 
 // NEW OPERATION: DATE INPUT
-
 const dateInput = document.getElementById('date-input');
+const filterDate = document.getElementById('filter-date');
 
 const day = new Date().getDate();
 const month = new Date().getMonth() + 1;
 const year = new Date().getFullYear();
 
-// dateInput.value = '2021/07/04';
-const setTodayDate = () =>{
-  dateInput.value = `${year}/${month < 10 ? '0' + month: month}/${day < 10 ? '0' + day: day}`;
+
+const setTodayDate = (bt) =>{
+  bt.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 }
+
+setTodayDate(filterDate);
 
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
@@ -76,7 +76,7 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
-  setTodayDate();
+  setTodayDate(dateInput);
   newOperationSection.style.display = 'block';
   balanceSection.style.display = 'none';
 })
@@ -95,6 +95,7 @@ const btnAcceptNewOperation = document.getElementById('acceptNewOperation');
 
 let operations = [];
 
+// Form inputs
 const description = document.getElementById('description');
 const amount = document.getElementById('amount');
 const type = document.getElementById('type');
@@ -102,16 +103,18 @@ const category = document.getElementById('category');
 
 let amountStyle;
 
+// Clear operations
 const clearOperations = () =>{
   description.value = '';
   amount.value = 0;
-  type.value = 'Gasto';
+  type.value = 'expense';
   category.value = '';
-  setTodayDate();
+  setTodayDate(dateInput);
 }
 
+// Print operations in HTML
 const printOperations = (operations)=>{
-  // withOperations.innerHTML = '';
+  withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
       const codeBox = `<div id="${operations[i].id}" class="columns">
           <div class="column is-3 description-style">${operations[i].description}</div> 
@@ -140,6 +143,7 @@ const printOperations = (operations)=>{
 
 // console.log(amountStyle)
 
+// Create new operation in JS
 btnAcceptNewOperation.addEventListener('click', ()=>{
   const newOp = {
       id: uuid.v4(),
@@ -149,6 +153,7 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
       category: category.value,
       date: dateInput.value
   }
+
   operations.push(newOp);
   localStorage.setItem('operations', JSON.stringify(operations));
   const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
@@ -160,3 +165,17 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
   noOperations.style.display = 'none';
   withOperations.style.display = 'block';
 })
+
+// Start with all operations of local Storage
+if(JSON.parse(localStorage.getItem('operations')) === null){
+  withOperations.classList.add('display');
+  noOperations.classList.remove('display');
+} else{
+  withOperations.classList.remove('display');
+  noOperations.classList.add('display');
+  operations = JSON.parse(localStorage.getItem('operations'));
+  printOperations(operations);
+}
+
+// operations = JSON.parse(localStorage.getItem('operations')) === null ? operations : JSON.parse(localStorage.getItem('operations'));
+// printOperations(operations);
