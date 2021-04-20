@@ -182,6 +182,7 @@ if(JSON.parse(localStorage.getItem('operations')) === null){
 
 // FILTERS
 
+// Show and unshow filters box
 const toggleFilters = document.getElementById('toggle-filters');
 const filtersBox = document.getElementById('filters');
 let filterDisplay = false;
@@ -197,3 +198,17 @@ toggleFilters.addEventListener('click', ()=>{
     filterDisplay = false;
   }
 })
+
+// Filter Tipo
+const filterType = document.getElementById('filter-type');
+
+const filterByType = (type, operations)=>{
+  let result;
+  type === 'all' ? result = operations : result = operations.filter((operations) => operations.type === type);
+  return result;
+}
+
+filterType.addEventListener('change', ()=>{
+  printOperations(filterByType(filterType.value, operations)); 
+})
+
