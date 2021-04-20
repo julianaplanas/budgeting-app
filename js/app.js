@@ -179,3 +179,21 @@ if(JSON.parse(localStorage.getItem('operations')) === null){
 
 // operations = JSON.parse(localStorage.getItem('operations')) === null ? operations : JSON.parse(localStorage.getItem('operations'));
 // printOperations(operations);
+
+// FILTERS
+
+const toggleFilters = document.getElementById('toggle-filters');
+const filtersBox = document.getElementById('filters');
+let filterDisplay = false;
+
+toggleFilters.addEventListener('click', ()=>{
+  if(filterDisplay === false){
+    filtersBox.style.display = 'block';
+    toggleFilters.innerHTML = 'Ocultar filtros';
+    filterDisplay = true;
+  } else{
+    filtersBox.style.display = 'none';
+    toggleFilters.innerHTML = 'Mostrar filtros';
+    filterDisplay = false;
+  }
+})
