@@ -118,21 +118,21 @@ button {
 
 .category-style{
     border: none;
-    /* background-color: lightgreen; */
     color: var(--colorGanancias);
     font-size: 0.8rem;
+    font-weight: 800;
 }
 
 .edit-op, .delete-op{
     font-size: 0.8rem;
 }
 
-.win-style{
+.gain-style{
     color: var(--colorGanancias);
     font-weight: 800;
 }
 
-.loose-style{
+.expense-style{
     color: var(--colorGastos);
     font-weight: 800;
 }

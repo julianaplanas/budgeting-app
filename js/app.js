@@ -1,3 +1,6 @@
+// $ = (selector) => document.querySelector(selector);
+// $ = (selector) =>document.querySelectorAll(selector);
+
 // BURGER NAVBAR
 document.addEventListener('DOMContentLoaded', () => {
     // Get all "navbar-burger" elements
@@ -33,6 +36,7 @@ const categoriasSection = document.getElementById('categoriasSection');
 const reportesSection = document.getElementById('reportesSection');
 
 btnBalance.addEventListener('click', ()=>{
+    // ${'#balanceSection'}.style.display = 'block';
     balanceSection.style.display = 'block';
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'none';
@@ -61,12 +65,14 @@ const day = new Date().getDate();
 const month = new Date().getMonth() + 1;
 const year = new Date().getFullYear();
 
+dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
-const setTodayDate = (bt) =>{
-  bt.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-}
+// const setTodayDate = (bt) =>{
+//   bt.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+// }
 
-setTodayDate(filterDate);
+// setTodayDate(filterDate);
 
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
@@ -76,7 +82,7 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
-  setTodayDate(dateInput);
+  // setTodayDate(dateInput);
   newOperationSection.style.display = 'block';
   balanceSection.style.display = 'none';
 })
@@ -109,7 +115,8 @@ const clearOperations = () =>{
   amount.value = 0;
   type.value = 'expense';
   category.value = '';
-  setTodayDate(dateInput);
+  dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+  // setTodayDate(dateInput);
 }
 
 // Print operations in HTML
@@ -120,7 +127,7 @@ const printOperations = (operations)=>{
           <div class="column is-3 description-style">${operations[i].description}</div> 
           <div class="column is-3 category-style">${operations[i].category}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
-          <div class="column is-2 has-text-right">${operations[i].amount}</div>
+          <div class="column is-2 has-text-right ${operations[i].type === 'gain' ? 'gain-style' : 'expense-style'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
           <div class="column is-2 has-text-right">
             <a class="edit-op">Editar</a>
             <a class="delete-op">Eliminar</a>
@@ -129,19 +136,6 @@ const printOperations = (operations)=>{
       withOperations.insertAdjacentHTML('beforeend', codeBox)
   }
 }
-
-// const winOrLoose = (operations) =>{
-//   // for (let i = 0; i < operations.length; i++) {
-//     if(type.value === 'Gasto'){
-//       amountStyle = `<div class="column is-2 has-text-right loose-style"> -${operations[i].amount}</div>`
-//     } else if(type.value === 'Ganancia'){
-//       amountStyle = `<div class="column is-2 has-text-right win-style"> +${operations[i].amount}</div>`
-//     }
-//   // }
-//   return amountStyle
-// }
-
-// console.log(amountStyle)
 
 // Create new operation in JS
 btnAcceptNewOperation.addEventListener('click', ()=>{
@@ -177,9 +171,6 @@ if(JSON.parse(localStorage.getItem('operations')) === null){
   printOperations(operations);
 }
 
-// operations = JSON.parse(localStorage.getItem('operations')) === null ? operations : JSON.parse(localStorage.getItem('operations'));
-// printOperations(operations);
-
 // FILTERS
 
 // Show and unshow filters box
@@ -199,16 +190,57 @@ toggleFilters.addEventListener('click', ()=>{
   }
 })
 
-// Filter Tipo
+// Categorias y Tipos filtros
+let operationsFiltered = [...operations];
 const filterType = document.getElementById('filter-type');
+const filterCategories = document.getElementById('filter-categories');
 
-const filterByType = (type, operations)=>{
-  let result;
-  type === 'all' ? result = operations : result = operations.filter((operations) => operations.type === type);
-  return result;
+const filters = (e) =>{
+  let atr = '';
+  if(e.target.id === 'filter-type'){
+    operationsFiltered = [...operations];
+    filterCategories.value = 'all';
+    atr = 'type';
+  } else{
+    filterType.value = 'all';
+    atr = 'category'
+  }
+  // puede haber error por la mayuscula o minuscula de los values/ingles y español
+  operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
+  e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
 }
 
-filterType.addEventListener('change', ()=>{
-  printOperations(filterByType(filterType.value, operations)); 
+filterCategories.addEventListener('change', (e) => {filters(e)});
+filterType.addEventListener('change', (e) => {filters(e)});
+
+// Filter de fecha
+filterDate.addEventListener('change', (e) =>{
+  let result = operations.filter(operation => operation.date === e.target.value);
+  printOperations(result);
 })
 
+// Filter Ordenar por
+const filterOrder = document.getElementById('filter-order');
+
+filterOrder.addEventListener('change', ()=>{
+  let newArr = [...operations];
+  if(filterOrder.value === 'a-z'){
+    newArr.sort((a, b) => a.description > b.description ? 1 : -1)
+  }
+  if(filterOrder.value === 'z-a'){
+    newArr.sort((a, b) => a.description < b.description ? 1 : -1)
+  }
+  if(filterOrder.value === 'more-recent'){
+    newArr.sort((a, b) => a.date < b.date ? 1 : -1)
+  }
+  if(filterOrder.value === 'less-recent'){
+    newArr.sort((a, b) => a.date > b.date ? 1 : -1)
+  }
+  if(filterOrder.value === 'more-amount'){
+    newArr.sort((a, b) => a.amount < b.amount ? 1 : -1)
+  }
+  if(filterOrder.value === 'less-amount'){
+    newArr.sort((a, b) => a.amount > b.amount ? 1 : -1)
+  }
+  printOperations(newArr)
+})
