@@ -237,10 +237,10 @@ filterOrder.addEventListener('change', ()=>{
     newArr.sort((a, b) => a.date > b.date ? 1 : -1)
   }
   if(filterOrder.value === 'more-amount'){
-    newArr.sort((a, b) => a.amount < b.amount ? 1 : -1)
+    newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
   }
   if(filterOrder.value === 'less-amount'){
-    newArr.sort((a, b) => a.amount > b.amount ? 1 : -1)
+    newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
   }
   printOperations(newArr)
 })
