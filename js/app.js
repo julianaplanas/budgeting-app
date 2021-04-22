@@ -68,12 +68,6 @@ const year = new Date().getFullYear();
 dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
-// const setTodayDate = (bt) =>{
-//   bt.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-// }
-
-// setTodayDate(filterDate);
-
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
 const btnNewOperation = document.getElementById('new-operation');
@@ -116,7 +110,6 @@ const clearOperations = () =>{
   type.value = 'expense';
   category.value = '';
   dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-  // setTodayDate(dateInput);
 }
 
 // Print operations in HTML
@@ -158,6 +151,7 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
   balanceSection.style.display = 'block';
   noOperations.style.display = 'none';
   withOperations.style.display = 'block';
+  reportCanvas();
 })
 
 // Start with all operations of local Storage
@@ -244,3 +238,46 @@ filterOrder.addEventListener('change', ()=>{
   }
   printOperations(newArr)
 })
+
+// REPORTES
+const noReports = document.getElementById('no-reports');
+const withReports = document.getElementById('with-reports');
+
+// Show or unshow reports 
+const filterByType = (type, operations) => {
+  return operations.filter((operation) => operation.type === type)
+}
+
+// const reportCanvas = () =>{
+//   if(filterByType('gain', operations).length < 0 ||
+//     filterByType('expense', operations).length < 0){
+//     noReports.style.display = 'block';
+//     withReports.style.display = 'none';
+//     console.log('no hay')
+//     console.log(filterByType('gain', operations));
+//     console.log(filterByType('expense', operations));
+//   } else{
+//     noReports.style.display = 'none';
+//     withReports.style.display = 'block';
+//     console.log('si hay')
+//     console.log(filterByType('gain', operations));
+//     console.log(filterByType('expense', operations));
+//   }
+// }
+
+// reportCanvas();
+
+// Total per category
+const categories = ['education', 'work'];
+
+const arr = [];
+for (let i = 0; i < categories.length; i++) {
+  const arrExpense = operations.filter(element => element.category === categories[i] && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+  const arrGain = operations.filter(element => element.category === categories[i] && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+  arr.push({name: categories[i], gain: arrGain, expense: arrExpense});
+}
+
+// console.log(arr);
+
+const result = Math.max(...arr.map(value => value.gain));
+console.log(result)
