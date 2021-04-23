@@ -147,11 +147,13 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
   printOperations(operationsLocalStorage);
 
   clearOperations();
+  reportesCanvas();
+  balance();
+  
   newOperationSection.style.display = 'none';
   balanceSection.style.display = 'block';
   noOperations.style.display = 'none';
   withOperations.style.display = 'block';
-  reportesCanvas();
 })
 
 // Start with all operations of local Storage
@@ -273,3 +275,22 @@ const categories = ['education', 'work'];
 
 // const result = Math.max(...arr.map(value => value.gain));
 // console.log(result)
+
+
+
+// BALANCE
+const earningsBalance = document.getElementById('earnings');
+const expensesBalance = document.getElementById('expenses');
+const balanceBalance = document.getElementById('balance');
+
+const balance = () =>{
+  let earnings = operations.filter(element => element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+  let expenses = operations.filter(element => element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+
+  earningsBalance.innerHTML = `+$${!profits ? 0 : earnings}`;
+  expensesBalance.innerHTML = `-$${!spending ? 0 : expenses}`;
+
+  balanceBalance.innerHTML = `$${earnings - expenses}`;
+}
+
+balance();
