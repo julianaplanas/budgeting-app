@@ -151,7 +151,7 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
   balanceSection.style.display = 'block';
   noOperations.style.display = 'none';
   withOperations.style.display = 'block';
-  reportCanvas();
+  reportesCanvas();
 })
 
 // Start with all operations of local Storage
@@ -240,44 +240,36 @@ filterOrder.addEventListener('change', ()=>{
 })
 
 // REPORTES
+
+// Show or unshow report section
 const noReports = document.getElementById('no-reports');
 const withReports = document.getElementById('with-reports');
 
-// Show or unshow reports 
-const filterByType = (type, operations) => {
-  return operations.filter((operation) => operation.type === type)
-}
+const profits = operations.some(el => el.type === 'gain');
+const spending = operations.some(el => el.type === 'expense');
 
-// const reportCanvas = () =>{
-//   if(filterByType('gain', operations).length < 0 ||
-//     filterByType('expense', operations).length < 0){
-//     noReports.style.display = 'block';
-//     withReports.style.display = 'none';
-//     console.log('no hay')
-//     console.log(filterByType('gain', operations));
-//     console.log(filterByType('expense', operations));
-//   } else{
-//     noReports.style.display = 'none';
-//     withReports.style.display = 'block';
-//     console.log('si hay')
-//     console.log(filterByType('gain', operations));
-//     console.log(filterByType('expense', operations));
-//   }
-// }
+const reportesCanvas = () =>{
+  if(!operations || operations.length === 0 || !profits || !spending){
+  withReports.classList.add('display');
+  noReports.classList.remove('display');
+} else{
+  withReports.classList.remove('display');
+  noReports.classList.add('display');
+}}
 
-// reportCanvas();
+reportesCanvas();
 
 // Total per category
 const categories = ['education', 'work'];
 
-const arr = [];
-for (let i = 0; i < categories.length; i++) {
-  const arrExpense = operations.filter(element => element.category === categories[i] && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
-  const arrGain = operations.filter(element => element.category === categories[i] && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
-  arr.push({name: categories[i], gain: arrGain, expense: arrExpense});
-}
+// const arr = [];
+// for (let i = 0; i < categories.length; i++) {
+//   const arrExpense = operations.filter(element => element.category === categories[i] && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+//   const arrGain = operations.filter(element => element.category === categories[i] && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+//   arr.push({name: categories[i], gain: arrGain, expense: arrExpense});
+// }
 
-// console.log(arr);
+// // console.log(arr);
 
-const result = Math.max(...arr.map(value => value.gain));
-console.log(result)
+// const result = Math.max(...arr.map(value => value.gain));
+// console.log(result)
