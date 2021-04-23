@@ -3,22 +3,22 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Get all "navbar-burger" elements
     const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-  
+
     // Check if there are any navbar burgers
     if ($navbarBurgers.length > 0) {
-  
+
       // Add a click event on each of them
       $navbarBurgers.forEach( el => {
         el.addEventListener('click', () => {
-  
+
           // Get the target from the "data-target" attribute
           const target = el.dataset.target;
           const $target = document.getElementById(target);
-  
+
           // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
           el.classList.toggle('is-active');
           $target.classList.toggle('is-active');
-  
+
         });
       });
     }
@@ -34,25 +34,28 @@ const balanceSection = document.getElementById('balanceSection');
 const categoriasSection = document.getElementById('categoriasSection');
 const reportesSection = document.getElementById('reportesSection');
 
-btnBalance.addEventListener('click', ()=>{
+btnBalance.addEventListener('click', () => {
     balanceSection.style.display = 'block';
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'none';
     newOperationSection.style.display = 'none';
+    editCategorySection.style.display = 'none';
 })
 
-btnCategorias.addEventListener('click', () =>{
+btnCategorias.addEventListener('click', () => {
     balanceSection.style.display = 'none';
     categoriasSection.style.display = 'block';
     reportesSection.style.display = 'none';
     newOperationSection.style.display = 'none';
+    editCategorySection.style.display = 'none';
 })
 
-btnReportes.addEventListener('click', ()=>{
+btnReportes.addEventListener('click', () => {
     balanceSection.style.display = 'none';
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'block';
     newOperationSection.style.display = 'none';
+    editCategorySection.style.display = 'none';
 })
 
 // NEW OPERATION: DATE INPUT
@@ -64,7 +67,7 @@ const month = new Date().getMonth() + 1;
 const year = new Date().getFullYear();
 
 // dateInput.value = '2021/07/04';
-const setTodayDate = () =>{
+const setTodayDate = () => {
   dateInput.value = `${year}/${month < 10 ? '0' + month: month}/${day < 10 ? '0' + day: day}`;
 }
 
@@ -75,13 +78,13 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 
 const newOperationSection = document.getElementById('newOperationSection');
 
-btnNewOperation.addEventListener('click', ()=>{
+btnNewOperation.addEventListener('click', () => {
   setTodayDate();
   newOperationSection.style.display = 'block';
   balanceSection.style.display = 'none';
 })
 
-btnCancelNewOperation.addEventListener('click', ()=>{
+btnCancelNewOperation.addEventListener('click', () => {
   newOperationSection.style.display = 'none';
   balanceSection.style.display = 'block';
 })
@@ -114,14 +117,14 @@ const printOperations = (operations)=>{
   // withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
       const codeBox = `<div id="${operations[i].id}" class="columns">
-          <div class="column is-3 description-style">${operations[i].description}</div> 
+          <div class="column is-3 description-style">${operations[i].description}</div>
           <div class="column is-3 category-style">${operations[i].category}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
           <div class="column is-2 has-text-right">${operations[i].amount}</div>
           <div class="column is-2 has-text-right">
             <a class="edit-op">Editar</a>
             <a class="delete-op">Eliminar</a>
-          </div> 
+          </div>
       </div>`
       withOperations.insertAdjacentHTML('beforeend', codeBox)
   }
@@ -160,3 +163,124 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
   noOperations.style.display = 'none';
   withOperations.style.display = 'block';
 })
+
+// CATEGORIES
+
+// DOM
+
+const categoriesSelect = document.getElementById('filter-categories');
+const inputCategories = document.getElementById('category-name');
+const categoriesList = document.getElementById('categories-list');
+const btnAddCategory = document.getElementById('btn-add-category');
+const btnEditCategory = document.getElementById('btn-edit-category');
+
+const editCategorySection = document.getElementById('edit-category-section');
+const inputEditCategory = document.getElementById('edit-category-input');
+
+// Categories
+
+let categories = [
+  {id:0, name:'Todas'},
+  {id:1, name:'Comida'},
+  {id:2, name:'Servicios'},
+  {id:3, name:'Salidas'},
+  {id:4, name:'Educación'},
+  {id:5, name:'Transporte'},
+  {id:6, name:'Trabajo'},
+];
+
+// -----  Local storage  -----
+
+localStorage.setItem('categoriesStorage', JSON.stringify(categories));
+const getCategoriesStorage = JSON.parse(localStorage.getItem('categoriesStorage'));
+
+// Add new category
+
+btnAddCategory.addEventListener("click", () => {
+
+  const newCategory = inputCategories.value;
+
+  if (newCategory === '') {
+    return false;
+  }
+
+  categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1).toLowerCase()});
+
+  localStorage.setItem('categoriesStorage', JSON.stringify(categories));
+  const getCategoriesStorage = JSON.parse(localStorage.getItem('categoriesStorage'));
+  setValueCategoriesSelect(getCategoriesStorage);
+  updateCategoriesList(getCategoriesStorage);
+
+  inputCategories.value = '';
+});
+
+// --- KeyCode on categories input ---
+
+inputCategories.addEventListener("keyup", function (event) {
+  if (event.key === 'Enter') {
+    btnAddCategory.click();
+  }
+});
+
+// Category select filter
+
+const setValueCategoriesSelect = () => {
+  categoriesSelect.innerHTML = '';
+  categories.forEach(
+    (category, index) =>
+    (categoriesSelect.options[index] = new Option(category.name, category.id))
+)};
+
+setValueCategoriesSelect()
+
+// Category list on categories view
+
+const updateCategoriesList = () => {
+  const list = categoriesList;
+
+  list.innerHTML = '';
+
+  for (let category of categories) {
+    const categoryItem = document.createElement('div');
+    categoryItem.classList.add('mb-3');
+    categoryItem.innerHTML = `
+    <div class="columns is-vcentered is-mobile">
+      <div class="column">
+        <span class="tag is-primary is-light">${category.name}</span>
+      </div>
+      <div class="column is-narrow has-text"
+        <p class="is-fullwidth has-text-right-tablet">
+          <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
+          <a href="#" class="is-size-7 delete-link">Eliminar</a>
+        </p>
+      </div>
+    </div>`;
+
+    const editAction = categoryItem.querySelector('.edit-link');
+    const deleteAction = categoryItem.querySelector('.delete-link');
+
+    // editAction.onclick = () => {
+    //   getCategoriesStorage(category.id);
+    //   showsEditButton(btnEditCategory);
+    // }
+    editAction.onclick = () => {
+      // editCategorySection.style.display = 'block';
+      // balanceSection.style.display = 'none';
+      // categoriasSection.style.display = 'none';
+      // reportesSection.style.display = 'none';
+      // newOperationSection.style.display = 'none';
+    }
+
+    deleteAction.onclick = () => {
+      // deleteCategory(category.id);
+    }
+
+    list.append(categoryItem);
+  }
+};
+
+updateCategoriesList();
+
+// Edit category
+
+// Delete category
