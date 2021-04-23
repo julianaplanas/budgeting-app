@@ -172,10 +172,11 @@ const categoriesSelect = document.getElementById('filter-categories');
 const inputCategories = document.getElementById('category-name');
 const categoriesList = document.getElementById('categories-list');
 const btnAddCategory = document.getElementById('btn-add-category');
-const btnEditCategory = document.getElementById('btn-edit-category');
 
 const editCategorySection = document.getElementById('edit-category-section');
 const inputEditCategory = document.getElementById('edit-category-input');
+const btnEditCategory = document.getElementById('edit-category-button');
+const btnCancelEditCategory = document.getElementById('cancel-category-button');
 
 // Categories
 
@@ -198,13 +199,13 @@ const getCategoriesStorage = JSON.parse(localStorage.getItem('categoriesStorage'
 
 btnAddCategory.addEventListener("click", () => {
 
-  const newCategory = inputCategories.value;
+  const newCategory = inputCategories.value.replace(/^\s+|\s+$/gm, '');
 
   if (newCategory === '') {
     return false;
   }
 
-  categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1).toLowerCase()});
+  categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
 
   localStorage.setItem('categoriesStorage', JSON.stringify(categories));
   const getCategoriesStorage = JSON.parse(localStorage.getItem('categoriesStorage'));
@@ -214,7 +215,7 @@ btnAddCategory.addEventListener("click", () => {
   inputCategories.value = '';
 });
 
-// --- KeyCode on categories input ---
+// --- KeyCode on new category input ---
 
 inputCategories.addEventListener("keyup", function (event) {
   if (event.key === 'Enter') {
@@ -222,7 +223,7 @@ inputCategories.addEventListener("keyup", function (event) {
   }
 });
 
-// Category select filter
+// Print categories on select filter
 
 const setValueCategoriesSelect = () => {
   categoriesSelect.innerHTML = '';
@@ -233,7 +234,7 @@ const setValueCategoriesSelect = () => {
 
 setValueCategoriesSelect()
 
-// Category list on categories view
+// Print category on category list
 
 const updateCategoriesList = () => {
   const list = categoriesList;
@@ -259,16 +260,13 @@ const updateCategoriesList = () => {
     const editAction = categoryItem.querySelector('.edit-link');
     const deleteAction = categoryItem.querySelector('.delete-link');
 
-    // editAction.onclick = () => {
-    //   getCategoriesStorage(category.id);
-    //   showsEditButton(btnEditCategory);
-    // }
     editAction.onclick = () => {
-      // editCategorySection.style.display = 'block';
-      // balanceSection.style.display = 'none';
-      // categoriasSection.style.display = 'none';
-      // reportesSection.style.display = 'none';
-      // newOperationSection.style.display = 'none';
+      editCategorySection.style.display = 'block';
+      balanceSection.style.display = 'none';
+      categoriasSection.style.display = 'none';
+      reportesSection.style.display = 'none';
+      newOperationSection.style.display = 'none';
+      editCategory();
     }
 
     deleteAction.onclick = () => {
@@ -282,5 +280,31 @@ const updateCategoriesList = () => {
 updateCategoriesList();
 
 // Edit category
+
+let index;
+const editCategory = (category) => {
+  index = categories.findIndex((elem) => elem.id === Number(category.id));
+  inputEditCategory.value = categories[index].name;
+  if (inputEditCategory.value === '') {
+    return false;
+  } else {
+    return index;
+  }
+};
+  
+editAction.addEventListener("click", () => {
+  categories[index].name = inputEditCategory.value;
+  localStorage.setItem("categoriesStorage", JSON.stringify(categories));
+  setValueCategoriesSelect(getCategoriesStorage);
+  updateCategoriesList(getCategoriesStorage);
+});
+
+// --- KeyCode on edit categories input ---
+
+inputEditCategory.addEventListener("keyup", function (event) {
+  if (event.key === 'Enter') {
+    btnEditCategory.click();
+  }
+});
 
 // Delete category
