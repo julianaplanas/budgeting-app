@@ -134,13 +134,8 @@ const printOperations = (operations)=>{
       });
       
       deleteButton.onclick = () => {
-        deleteOperation(operations.id)
+        deleteOperation(operations[i].id);
       }
-
-      // deleteButton.addEventListener('click', () =>{
-      //   console.log('eliminar');
-      //   deleteOperation(operations.id);
-      // });
       
       withOperations.append(codeOperation)
   }
@@ -255,8 +250,15 @@ filterOrder.addEventListener('change', ()=>{
 
 // Edit and delete operations
 const deleteOperation = (idOperation) => {
-  console.log(idOperation)
-  return
+  operations = operations.filter(operation => operation.id !== idOperation);
+  localStorage.setItem('operations', JSON.stringify(operations));
+  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+  printOperations(operationsLocalStorage);
+
+  if(operations.length < 1){
+    withOperations.style.display = 'none';
+    noOperations.style.display = 'block';
+  }
 }
 
 
