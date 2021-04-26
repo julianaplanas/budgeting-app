@@ -36,7 +36,6 @@ const categoriasSection = document.getElementById('categoriasSection');
 const reportesSection = document.getElementById('reportesSection');
 
 btnBalance.addEventListener('click', ()=>{
-    // ${'#balanceSection'}.style.display = 'block';
     balanceSection.style.display = 'block';
     categoriasSection.style.display = 'none';
     reportesSection.style.display = 'none';
@@ -68,12 +67,6 @@ const year = new Date().getFullYear();
 dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
-// const setTodayDate = (bt) =>{
-//   bt.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-// }
-
-// setTodayDate(filterDate);
-
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
 const btnNewOperation = document.getElementById('new-operation');
@@ -82,7 +75,6 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
-  // setTodayDate(dateInput);
   newOperationSection.style.display = 'block';
   balanceSection.style.display = 'none';
 })
@@ -116,14 +108,14 @@ const clearOperations = () =>{
   type.value = 'expense';
   category.value = '';
   dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-  // setTodayDate(dateInput);
 }
 
 // Print operations in HTML
 const printOperations = (operations)=>{
   withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
-      const codeBox = `<div id="${operations[i].id}" class="columns">
+      const codeOperation = document.createElement('div');
+      codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns">
           <div class="column is-3 description-style">${operations[i].description}</div> 
           <div class="column is-3 category-style">${operations[i].category}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
@@ -133,7 +125,24 @@ const printOperations = (operations)=>{
             <a class="delete-op">Eliminar</a>
           </div> 
       </div>`
-      withOperations.insertAdjacentHTML('beforeend', codeBox)
+
+      const editButton = codeOperation.querySelector('.edit-op')
+      const deleteButton = codeOperation.querySelector('.delete-op')
+
+      editButton.addEventListener('click', () =>{
+        console.log('editar');
+      });
+      
+      deleteButton.onclick = () => {
+        deleteOperation(operations.id)
+      }
+
+      // deleteButton.addEventListener('click', () =>{
+      //   console.log('eliminar');
+      //   deleteOperation(operations.id);
+      // });
+      
+      withOperations.append(codeOperation)
   }
 }
 
@@ -205,7 +214,6 @@ const filters = (e) =>{
     filterType.value = 'all';
     atr = 'category'
   }
-  // puede haber error por la mayuscula o minuscula de los values/ingles y español
   operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
   e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
 }
@@ -244,3 +252,51 @@ filterOrder.addEventListener('change', ()=>{
   }
   printOperations(newArr)
 })
+
+// Edit and delete operations
+const deleteOperation = (idOperation) => {
+  console.log(idOperation)
+  return
+}
+
+
+
+
+// const editarOperacion = (idOperacion, operacionNueva, operaciones) => {
+//   return operaciones.map((operacion) =>
+//     operacion.id === idOperacion
+//       ? { id: operacion.id, ...operacionNueva }
+//       : operacion
+//   )
+// }
+
+// const cargarDatosOperacion = (id) => {
+//   const operacion = obtenerOperacion(id, obtenerOperaciones())
+//   $('#editar-descripcion-input').value = operacion.descripcion
+//   $('#editar-monto-input').value = operacion.monto
+//   $('#editar-categorias-select').value = operacion.categoria
+//   $('#editar-fecha-input').valueAsDate = new Date(operacion.fecha)
+//   $('#editar-tipo-operacion').value = operacion.tipo.toUpperCase()
+//   $('#editar-operacion-boton').onclick = () => editarOperacionHandler(id)
+// }
+
+// const editarOperacionHandler = (id) => {
+//   const descripcion = $('#editar-descripcion-input').value
+//   const monto = Number($('#editar-monto-input').value)
+//   const categoria = $('#editar-categorias-select').value
+//   const tipo = $('#editar-tipo-operacion').value
+//   const fecha = $('#editar-fecha-input').value.replace(/-/g, '/')
+
+//   const operaciones = editarOperacion(
+//     id,
+//     {
+//       descripcion,
+//       monto,
+//       categoria,
+//       tipo,
+//       fecha,
+//     },
+//     obtenerOperaciones()
+//   )
+//   actualizarDatos({ operaciones })
+// }
