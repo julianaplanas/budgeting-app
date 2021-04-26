@@ -35,15 +35,6 @@ const balanceSection = document.getElementById('balanceSection');
 const categoriasSection = document.getElementById('categoriasSection');
 const reportesSection = document.getElementById('reportesSection');
 
-btnBalance.addEventListener('click', () => {
-  // ${'#balanceSection'}.style.display = 'block';
-  balanceSection.style.display = 'block';
-  categoriasSection.style.display = 'none';
-  reportesSection.style.display = 'none';
-  newOperationSection.style.display = 'none';
-  editCategorySection.style.display = 'none';
-})
-
 btnCategorias.addEventListener('click', () => {
   balanceSection.style.display = 'none';
   categoriasSection.style.display = 'block';
@@ -85,9 +76,9 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
-// setTodayDate(dateInput);
-newOperationSection.style.display = 'block';
-balanceSection.style.display = 'none';
+  // setTodayDate(dateInput);
+  newOperationSection.style.display = 'block';
+  balanceSection.style.display = 'none';
 })
 
 btnCancelNewOperation.addEventListener('click', ()=>{
@@ -114,30 +105,30 @@ let amountStyle;
 
 // Clear operations
 const clearOperations = () =>{
-description.value = '';
-amount.value = 0;
-type.value = 'expense';
-categoryOp.value = '';
-dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-// setTodayDate(dateInput);
+  description.value = '';
+  amount.value = 0;
+  type.value = 'expense';
+  category.value = '';
+  dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+  // setTodayDate(dateInput);
 }
 
 // Print operations in HTML
 const printOperations = (operations)=>{
-withOperations.innerHTML = '';
-for (let i = 0; i < operations.length; i++) {
-    const codeBox = `<div id="${operations[i].id}" class="columns">
-        <div class="column is-3 description-style">${operations[i].description}</div> 
-        <div class="column is-3 category-style">${operations[i].categoryOp}</div>
-        <div class="column is-2 has-text-right">${operations[i].date}</div>
-        <div class="column is-2 has-text-right ${operations[i].type === 'gain' ? 'gain-style' : 'expense-style'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
-        <div class="column is-2 has-text-right">
-          <a class="edit-op">Editar</a>
-          <a class="delete-op">Eliminar</a>
-        </div> 
-    </div>`
-    withOperations.insertAdjacentHTML('beforeend', codeBox)
-}
+  withOperations.innerHTML = '';
+  for (let i = 0; i < operations.length; i++) {
+      const codeBox = `<div id="${operations[i].id}" class="columns">
+          <div class="column is-3 description-style">${operations[i].description}</div> 
+          <div class="column is-3 category-style">${operations[i].category}</div>
+          <div class="column is-2 has-text-right">${operations[i].date}</div>
+          <div class="column is-2 has-text-right ${operations[i].type === 'gain' ? 'gain-style' : 'expense-style'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
+          <div class="column is-2 has-text-right">
+            <a class="edit-op">Editar</a>
+            <a class="delete-op">Eliminar</a>
+          </div> 
+      </div>`
+      withOperations.insertAdjacentHTML('beforeend', codeBox)
+  }
 }
 
 // Create new operation in JS

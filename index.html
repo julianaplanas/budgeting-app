@@ -12,6 +12,7 @@
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
 
     <!-- Style links -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
@@ -116,9 +117,9 @@
                     <div class="control">
                       <div class="select is-fullwidth">
                         <select id="filter-type">
-                          <option value="ALL">Todos</option>
-                          <option value="EARNINGS">Ganancias</option>
-                          <option value="EXPENSES">Gastos</option>
+                          <option value="all">Todos</option>
+                          <option value="gain">Ganancias</option>
+                          <option value="expense">Gastos</option>
                         </select>
                       </div>
                     </div>
@@ -129,7 +130,9 @@
                     <div class="control">
                       <div class="select is-fullwidth">
                         <select class="filter-categories categories-select" id="filter-categories">
-                          <option value="ALL">Todas</option>
+                          <option value="all">Todas</option>
+                          <option value='education'>Educación</option>
+                          <option value='work'>Trabajo</option>
                         </select>
                       </div>
                     </div>
@@ -149,12 +152,13 @@
                     <div class="control">
                       <div class="select is-fullwidth">
                         <select id="filter-order">
-                          <option value="MORE_RECENT">Más reciente</option>
-                          <option value="LESS_RECENT">Menos reciente</option>
-                          <option value="MORE_AMOUNT">Mayor monto</option>
-                          <option value="LESS_AMOUNT">Menor monto</option>
-                          <option value="A/Z">A/Z</option>
-                          <option value="Z/A">Z/A</option>
+                          <option value="more-recent">Más reciente</option>
+                          <option value="less-recent">Menos reciente</option>
+                          <option value="more-amount">Mayor monto</option>
+                          <option value="less-amount">Menor monto</option>
+                          <option value="a-z"
+                          >A/Z</option>
+                          <option value="z-a">Z/A</option>
                         </select>
                       </div>
                     </div>
@@ -174,22 +178,22 @@
                     <button type="button" class="button new-operation" id="new-operation">+ Nueva operación</button>
                   </div>
                 </div>
-                  <div id="with-operations" class="display">
-                    <div class="columns has-text-weight-semibold is-hidden-mobile">
-                      <div class="column is-3">Descripción</div>
-                      <div class="column is-3">Categoría</div>
-                      <div class="column is-2 has-text-right">Fecha</div>
-                      <div class="column is-2 has-text-right">Monto</div>
-                      <div class="column is-2 has-text-right">Acciones</div>
-                    </div>
+                <div id="with-operations" class="">
+                  <div class="columns has-text-weight-semibold is-hidden-mobile">
+                    <div class="column is-3">Descripción</div>
+                    <div class="column is-3">Categoría</div>
+                    <div class="column is-2 has-text-right">Fecha</div>
+                    <div class="column is-2 has-text-right">Monto</div>
+                    <div class="column is-2 has-text-right">Acciones</div>
                   </div>
-                  <div id="no-operations" class="my-6 py-6">
+                </div>
+                <div id="no-operations" class="my-6 py-6">
                     <figure class="image"> 
                       <img src="./assets/img/money1.png" alt="">
                     </figure>
                     <h4 class="is-size-4 has-text-centered mt-6 mb-4 has-text-weight-semibold">Sin resultados</h4>
                     <p class="has-text-centered">Cambia los filtros o agrega operaciones</p>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -241,8 +245,8 @@
                 <div class="control">
                   <div class="select is-fullwidth">
                     <select id="category">
-                      <!-- <option>Educación</option>
-                      <option>Trabajo</option> -->
+                      <option value='education'>Educación</option>
+                      <option value='work'>Trabajo</option>
                     </select>
                   </div>
                 </div>
