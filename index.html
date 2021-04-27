@@ -88,15 +88,15 @@
                 <h3 class="is-size-4 has-text-weight-bold mb-6">Balance</h3>
                 <div class="columns is-mobile is-vcentered">
                   <div class="column is-size-6">Ganancias</div>
-                  <div class="column has-text-right has-text-success" id="earnings">+$0</div>
+                  <div class="column has-text-right gain-style" id="earnings"></div>
                 </div>
                 <div class="columns is-mobile is-vcentered">
                   <div class="column is-size-6">Gastos</div>
-                  <div class="column has-text-right has-text-danger" id="expenses">-$0</div>
+                  <div class="column has-text-right expense-style" id="expenses"></div>
                 </div>
                 <div class="columns is-mobile is-vcentered">
                   <div class="column is-size-6 has-text-weight-medium">Total</div>
-                  <div class="column has-text-right has-text-weight-medium" id="balance">$0</div>
+                  <div class="column has-text-right has-text-weight-semibold" id="balance">$0</div>
                 </div>
               </div>
 
@@ -111,6 +111,7 @@
                   </div>
                 </div>
                 <div id="filters">
+                  <!-- Filter by type -->
                   <div class="field">
                     <label for="filter-type">Tipo</label>
                     <div class="control">
@@ -123,6 +124,7 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Filter by category -->
                   <div class="field">
                     <label for="filter-type">Categoría</label>
                     <div class="control">
@@ -135,6 +137,7 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Filter by date -->
                   <div class="field">
                     <label for="filter-date">Desde</label>
                     <div class="control">
@@ -143,6 +146,7 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Filter by order -->
                   <div class="field">
                     <label for="filter-order">Ordenar por</label>
                     <div class="control">
@@ -353,28 +357,52 @@
       <section class="section mt-5 vista display" id="categoriasSection">
         <article class="container">
           <div class="columns">
-              <div class="column is-three-fifths is-offset-one-fifth">
-                  <div class="box">
-                      <!-- Title -->
-                      <h1 class="subtitle">Categorías</h1>
-                      <!-- Input -->
-                      <label class="label">Nombre</label>
-                      <div class="field is-grouped">
-                          <p class="control is-expanded">
-                            <input class="input" type="text">
-                          </p>
-                          <p class="control">
-                            <a class="button add-category">
-                              Agregar
-                            </a>
-                          </p>
-                      </div>
-                  </div>
+            <div class="column is-three-fifths is-offset-one-fifth">
+              <div class="box">
+                <!-- Title -->
+                <h1 class="subtitle">Categorías</h1>
+                <!-- Input -->
+                <label for="category-name" class="label">Nombre</label>
+                <div class="field is-grouped">
+                  <p class="control is-expanded">
+                    <input id="category-name" class="input" type="text">
+                  </p>
+                  <p class="control">
+                    <button id="btn-add-category" class="button add-category">Agregar</button>
+                  </p>
+                </div>
+                <div class="mt-6" id="categories-list">
+                </div>
               </div>
             </div>
+          </div>
         </article>
       </section>
       <!-- END OF CATEGORIAS -->
+
+      <!-- START OF EDITAR CATEGORÍAS -->
+      <section class="section mt-5 vista display" id="edit-category-section">
+        <div class="container">
+          <div class="columns is-multiline">
+            <div class="column is-8-widescreen is-10-desktop is-offset-2-widescreen is-offset-1-desktop">
+              <div class="box">
+                <h2 class="title">Editar categoría</h2>
+                <label for="edit-category-input" class="label mt-6">Nombre</label>
+                <div class="field is-grouped">
+                  <div class="control is-expanded">
+                    <input class="input" type="text" id="edit-category-input">
+                  </div>
+                </div>
+                <div class="buttons mt-6">
+                  <button class="button is-light" id="cancel-category-button">Cancelar</button>
+                  <button class="button is-success" id="edit-category-button">Editar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- END OF EDITAR CATEGORÍAS -->
 
       <!-- START OF REPORTES  -->
       <section class="section mt-5 vista display" id="reportesSection">
@@ -392,7 +420,8 @@
                     <p class="has-text-centered">Prueba agregando más operaciones</p>
                   </div>
                 </div>
-                <div id="with-reports">
+                <div id="with-reports" class="display">
+                  <p>Hay operaciones</p>
                 </div>
               </div>
             </div>
