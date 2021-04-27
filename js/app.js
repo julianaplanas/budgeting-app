@@ -3,27 +3,27 @@
 
 // BURGER NAVBAR
 document.addEventListener('DOMContentLoaded', () => {
-    // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-  
-    // Check if there are any navbar burgers
-    if ($navbarBurgers.length > 0) {
-  
-      // Add a click event on each of them
-      $navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-  
-          // Get the target from the "data-target" attribute
-          const target = el.dataset.target;
-          const $target = document.getElementById(target);
-  
-          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-          el.classList.toggle('is-active');
-          $target.classList.toggle('is-active');
-  
-        });
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Check if there are any navbar burgers
+  if ($navbarBurgers.length > 0) {
+
+    // Add a click event on each of them
+    $navbarBurgers.forEach( el => {
+      el.addEventListener('click', () => {
+
+        // Get the target from the "data-target" attribute
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+
       });
-    }
+    });
+  }
 });
 
 // NAVBAR BUTTONS
@@ -35,26 +35,20 @@ const balanceSection = document.getElementById('balanceSection');
 const categoriasSection = document.getElementById('categoriasSection');
 const reportesSection = document.getElementById('reportesSection');
 
-btnBalance.addEventListener('click', ()=>{
-    // ${'#balanceSection'}.style.display = 'block';
-    balanceSection.style.display = 'block';
-    categoriasSection.style.display = 'none';
-    reportesSection.style.display = 'none';
-    newOperationSection.style.display = 'none';
+btnCategorias.addEventListener('click', () => {
+  balanceSection.style.display = 'none';
+  categoriasSection.style.display = 'block';
+  reportesSection.style.display = 'none';
+  newOperationSection.style.display = 'none';
+  editCategorySection.style.display = 'none';
 })
 
-btnCategorias.addEventListener('click', () =>{
-    balanceSection.style.display = 'none';
-    categoriasSection.style.display = 'block';
-    reportesSection.style.display = 'none';
-    newOperationSection.style.display = 'none';
-})
-
-btnReportes.addEventListener('click', ()=>{
-    balanceSection.style.display = 'none';
-    categoriasSection.style.display = 'none';
-    reportesSection.style.display = 'block';
-    newOperationSection.style.display = 'none';
+btnReportes.addEventListener('click', () => {
+  balanceSection.style.display = 'none';
+  categoriasSection.style.display = 'none';
+  reportesSection.style.display = 'block';
+  newOperationSection.style.display = 'none';
+  editCategorySection.style.display = 'none';
 })
 
 // NEW OPERATION: DATE INPUT
@@ -82,8 +76,8 @@ btnNewOperation.addEventListener('click', ()=>{
 })
 
 btnCancelNewOperation.addEventListener('click', ()=>{
-  newOperationSection.style.display = 'none';
-  balanceSection.style.display = 'block';
+newOperationSection.style.display = 'none';
+balanceSection.style.display = 'block';
 })
 
 // NEW OPERATION: ADD NEW OPERATION
@@ -99,7 +93,7 @@ let operations = [];
 const description = document.getElementById('description');
 const amount = document.getElementById('amount');
 const type = document.getElementById('type');
-const category = document.getElementById('category');
+const categoryOp = document.getElementById('category');
 
 let amountStyle;
 
@@ -132,19 +126,19 @@ const printOperations = (operations)=>{
 
 // Create new operation in JS
 btnAcceptNewOperation.addEventListener('click', ()=>{
-  const newOp = {
-      id: uuid.v4(),
-      description: description.value,
-      amount: amount.value,
-      type: type.value,
-      category: category.value,
-      date: dateInput.value
-  }
+const newOp = {
+    id: uuid.v4(),
+    description: description.value,
+    amount: amount.value,
+    type: type.value,
+    category: categoryOp.value,
+    date: dateInput.value
+}
 
-  operations.push(newOp);
-  localStorage.setItem('operations', JSON.stringify(operations));
-  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
-  printOperations(operationsLocalStorage);
+operations.push(newOp);
+localStorage.setItem('operations', JSON.stringify(operations));
+const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+printOperations(operationsLocalStorage);
 
   clearOperations();
   reportesCanvas();
@@ -158,13 +152,13 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
 
 // Start with all operations of local Storage
 if(JSON.parse(localStorage.getItem('operations')) === null){
-  withOperations.classList.add('display');
-  noOperations.classList.remove('display');
+withOperations.classList.add('display');
+noOperations.classList.remove('display');
 } else{
-  withOperations.classList.remove('display');
-  noOperations.classList.add('display');
-  operations = JSON.parse(localStorage.getItem('operations'));
-  printOperations(operations);
+withOperations.classList.remove('display');
+noOperations.classList.add('display');
+operations = JSON.parse(localStorage.getItem('operations'));
+printOperations(operations);
 }
 
 // FILTERS
@@ -175,15 +169,15 @@ const filtersBox = document.getElementById('filters');
 let filterDisplay = false;
 
 toggleFilters.addEventListener('click', ()=>{
-  if(filterDisplay === false){
-    filtersBox.style.display = 'block';
-    toggleFilters.innerHTML = 'Ocultar filtros';
-    filterDisplay = true;
-  } else{
-    filtersBox.style.display = 'none';
-    toggleFilters.innerHTML = 'Mostrar filtros';
-    filterDisplay = false;
-  }
+if(filterDisplay === false){
+  filtersBox.style.display = 'block';
+  toggleFilters.innerHTML = 'Ocultar filtros';
+  filterDisplay = true;
+} else{
+  filtersBox.style.display = 'none';
+  toggleFilters.innerHTML = 'Mostrar filtros';
+  filterDisplay = false;
+}
 })
 
 // Categorias y Tipos filtros
@@ -192,18 +186,18 @@ const filterType = document.getElementById('filter-type');
 const filterCategories = document.getElementById('filter-categories');
 
 const filters = (e) =>{
-  let atr = '';
-  if(e.target.id === 'filter-type'){
-    operationsFiltered = [...operations];
-    filterCategories.value = 'all';
-    atr = 'type';
-  } else{
-    filterType.value = 'all';
-    atr = 'category'
-  }
-  // puede haber error por la mayuscula o minuscula de los values/ingles y español
-  operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
-  e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
+let atr = '';
+if(e.target.id === 'filter-type'){
+  operationsFiltered = [...operations];
+  filterCategories.value = 'all';
+  atr = 'type';
+} else{
+  filterType.value = 'all';
+  atr = 'category'
+}
+// puede haber error por la mayuscula o minuscula de los values/ingles y español
+operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
+e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
 }
 
 filterCategories.addEventListener('change', (e) => {filters(e)});
@@ -211,32 +205,130 @@ filterType.addEventListener('change', (e) => {filters(e)});
 
 // Filter de fecha
 filterDate.addEventListener('change', (e) =>{
-  let result = operations.filter(operation => operation.date === e.target.value);
-  printOperations(result);
+let result = operations.filter(operation => operation.date === e.target.value);
+printOperations(result);
 })
 
 // Filter Ordenar por
 const filterOrder = document.getElementById('filter-order');
 
 filterOrder.addEventListener('change', ()=>{
-  let newArr = [...operations];
-  if(filterOrder.value === 'a-z'){
-    newArr.sort((a, b) => a.description > b.description ? 1 : -1)
+let newArr = [...operations];
+if(filterOrder.value === 'a-z'){
+  newArr.sort((a, b) => a.description > b.description ? 1 : -1)
+}
+if(filterOrder.value === 'z-a'){
+  newArr.sort((a, b) => a.description < b.description ? 1 : -1)
+}
+if(filterOrder.value === 'more-recent'){
+  newArr.sort((a, b) => a.date < b.date ? 1 : -1)
+}
+if(filterOrder.value === 'less-recent'){
+  newArr.sort((a, b) => a.date > b.date ? 1 : -1)
+}
+if(filterOrder.value === 'more-amount'){
+  newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
+}
+if(filterOrder.value === 'less-amount'){
+  newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
+}
+printOperations(newArr)
+})
+
+// CATEGORIES
+
+// DOM
+const categoriesSelect = document.getElementById('filter-categories');
+const inputCategories = document.getElementById('category-name');
+const categoriesList = document.getElementById('categories-list');
+const btnAddCategory = document.getElementById('btn-add-category');
+
+const editCategorySection = document.getElementById('edit-category-section');
+const inputEditCategory = document.getElementById('edit-category-input');
+const btnEditCategory = document.getElementById('edit-category-button');
+const btnCancelEditCategory = document.getElementById('cancel-category-button');
+
+// Categories
+let categories = [];
+
+// -----  Local storage  -----
+localStorage.setItem('categories', JSON.stringify(categories));
+const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
+
+// Add new category
+
+btnAddCategory.addEventListener("click", () => {
+
+const newCategory = inputCategories.value.replace(/^\s+|\s+$/gm, '');
+
+if (newCategory === '') {
+  return false;
+}
+
+categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
+
+localStorage.setItem('categories', JSON.stringify(categories));
+const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
+setValueCategoriesSelect(getCategoriesStorage);
+updateCategoriesList(getCategoriesStorage);
+
+inputCategories.value = '';
+
+});
+
+// --- KeyCode on new category input ---
+inputCategories.addEventListener("keyup", function (event) {
+if (event.key === 'Enter') {
+  btnAddCategory.click();
+}
+});
+
+// Print categories on select filter
+const setValueCategoriesSelect = () => {
+categoriesSelect.innerHTML = '';
+categories.forEach(
+  (category, index) =>
+  (categoriesSelect.options[index] = new Option(category.name, category.id))
+)};
+
+setValueCategoriesSelect();
+
+// Print category on categories list
+const updateCategoriesList = () => {
+const list = categoriesList;
+
+list.innerHTML = '';
+
+for (let category of categories) {
+  const categoryItem = document.createElement('div');
+  categoryItem.classList.add('mb-3');
+  categoryItem.innerHTML = `
+  <div class="columns is-vcentered is-mobile">
+    <div class="column">
+      <span class="tag is-primary is-light">${category.name}</span>
+    </div>
+    <div class="column is-narrow has-text"
+      <p class="is-fullwidth has-text-right-tablet">
+        <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
+        <a href="#" class="is-size-7 delete-link">Eliminar</a>
+      </p>
+    </div>
+  </div>`;
+
+  const editAction = categoryItem.querySelector('.edit-link');
+  const deleteAction = categoryItem.querySelector('.delete-link');
+
+  editAction.onclick = () => {
+    editCategorySection.style.display = 'block';
+    balanceSection.style.display = 'none';
+    categoriasSection.style.display = 'none';
+    reportesSection.style.display = 'none';
+    newOperationSection.style.display = 'none';
+    editCategory();
   }
-  if(filterOrder.value === 'z-a'){
-    newArr.sort((a, b) => a.description < b.description ? 1 : -1)
-  }
-  if(filterOrder.value === 'more-recent'){
-    newArr.sort((a, b) => a.date < b.date ? 1 : -1)
-  }
-  if(filterOrder.value === 'less-recent'){
-    newArr.sort((a, b) => a.date > b.date ? 1 : -1)
-  }
-  if(filterOrder.value === 'more-amount'){
-    newArr.sort((a, b) => a.amount < b.amount ? 1 : -1)
-  }
-  if(filterOrder.value === 'less-amount'){
-    newArr.sort((a, b) => a.amount > b.amount ? 1 : -1)
+
+  deleteAction.onclick = () => {
+    // deleteCategory(category.id);
   }
   printOperations(newArr)
 })
