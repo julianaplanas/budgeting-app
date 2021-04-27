@@ -62,12 +62,6 @@ const year = new Date().getFullYear();
 dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
-// const setTodayDate = (bt) =>{
-//   bt.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-// }
-
-// setTodayDate(filterDate);
-
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
 const btnNewOperation = document.getElementById('new-operation');
@@ -110,7 +104,6 @@ const clearOperations = () =>{
   type.value = 'expense';
   category.value = '';
   dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-  // setTodayDate(dateInput);
 }
 
 // Print operations in HTML
@@ -147,11 +140,14 @@ localStorage.setItem('operations', JSON.stringify(operations));
 const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
 printOperations(operationsLocalStorage);
 
-clearOperations();
-newOperationSection.style.display = 'none';
-balanceSection.style.display = 'block';
-noOperations.style.display = 'none';
-withOperations.style.display = 'block';
+  clearOperations();
+  reportesCanvas();
+  balance();
+  
+  newOperationSection.style.display = 'none';
+  balanceSection.style.display = 'block';
+  noOperations.style.display = 'none';
+  withOperations.style.display = 'block';
 })
 
 // Start with all operations of local Storage
@@ -334,36 +330,59 @@ for (let category of categories) {
   deleteAction.onclick = () => {
     // deleteCategory(category.id);
   }
+  printOperations(newArr)
+})
 
-  list.append(categoryItem);
-}};
+// REPORTES
 
-updateCategoriesList();
+// Show or unshow report section
+const noReports = document.getElementById('no-reports');
+const withReports = document.getElementById('with-reports');
 
-// Edit category
+const profits = operations.some(el => el.type === 'gain');
+const spending = operations.some(el => el.type === 'expense');
 
-// --- KeyCode on edit categories input ---
-inputEditCategory.addEventListener("keyup", function (event) {
-if (event.key === 'Enter') {
-  btnEditCategory.click();
-}
-});
+const reportesCanvas = () =>{
+  if(!operations || operations.length === 0 || !profits || !spending){
+  withReports.classList.add('display');
+  noReports.classList.remove('display');
+} else{
+  withReports.classList.remove('display');
+  noReports.classList.add('display');
+}}
 
-// Delete category
+reportesCanvas();
 
-// Start with all categories of local Storage
-// if (JSON.parse(localStorage.getItem('categories')) === null){
-//   categories = [
-//     {id:0, name:'Todas'},
-//     {id:1, name:'Comida'},
-//     {id:2, name:'Servicios'},
-//     {id:3, name:'Salidas'},
-//     {id:4, name:'Educación'},
-//     {id:5, name:'Transporte'},
-//     {id:6, name:'Trabajo'}
-//   ];
-// } else {
-//   categories = JSON.parse(localStorage.getItem('categories'));
-//   setValueCategoriesSelect(getCategoriesStorage);
-//   updateCategoriesList(getCategoriesStorage);
+// Total per category
+const categories = ['education', 'work'];
+
+// const arr = [];
+// for (let i = 0; i < categories.length; i++) {
+//   const arrExpense = operations.filter(element => element.category === categories[i] && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+//   const arrGain = operations.filter(element => element.category === categories[i] && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+//   arr.push({name: categories[i], gain: arrGain, expense: arrExpense});
 // }
+
+// // console.log(arr);
+
+// const result = Math.max(...arr.map(value => value.gain));
+// console.log(result)
+
+
+
+// BALANCE
+const earningsBalance = document.getElementById('earnings');
+const expensesBalance = document.getElementById('expenses');
+const balanceBalance = document.getElementById('balance');
+
+const balance = () =>{
+  let earnings = operations.filter(element => element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+  let expenses = operations.filter(element => element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+
+  earningsBalance.innerHTML = `+$${!profits ? 0 : earnings}`;
+  expensesBalance.innerHTML = `-$${!spending ? 0 : expenses}`;
+
+  balanceBalance.innerHTML = `$${earnings - expenses}`;
+}
+
+balance();
