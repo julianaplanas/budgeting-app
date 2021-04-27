@@ -171,7 +171,7 @@ printOperations(operationsLocalStorage);
 })
 
 // Start with all operations of local Storage
-if(operations.length < 1){
+if(operations.length > 1){
   withOperations.style.display = 'none';
   noOperations.style.display = 'block';
 } else{
@@ -278,79 +278,79 @@ const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
 
 btnAddCategory.addEventListener("click", () => {
 
-const newCategory = inputCategories.value.replace(/^\s+|\s+$/gm, '');
+  const newCategory = inputCategories.value.replace(/^\s+|\s+$/gm, '');
 
-if (newCategory === '') {
-  return false;
-}
+  if (newCategory === '') {
+    return false;
+  }
 
-categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
+  categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
 
-localStorage.setItem('categories', JSON.stringify(categories));
-const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
-setValueCategoriesSelect(getCategoriesStorage);
-updateCategoriesList(getCategoriesStorage);
+  localStorage.setItem('categories', JSON.stringify(categories));
+  const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
+  setValueCategoriesSelect(getCategoriesStorage);
+  updateCategoriesList(getCategoriesStorage);
 
-inputCategories.value = '';
+  inputCategories.value = '';
 
 });
 
 // --- KeyCode on new category input ---
 inputCategories.addEventListener("keyup", function (event) {
-if (event.key === 'Enter') {
-  btnAddCategory.click();
-}
+  if (event.key === 'Enter') {
+    btnAddCategory.click();
+  }
 });
 
 // Print categories on select filter
 const setValueCategoriesSelect = () => {
-categoriesSelect.innerHTML = '';
-categories.forEach(
-  (category, index) =>
-  (categoriesSelect.options[index] = new Option(category.name, category.id))
+  categoriesSelect.innerHTML = '';
+  categories.forEach(
+    (category, index) =>
+    (categoriesSelect.options[index] = new Option(category.name, category.id))
 )};
 
 setValueCategoriesSelect();
 
 // Print category on categories list
 const updateCategoriesList = () => {
-const list = categoriesList;
+  const list = categoriesList;
 
-list.innerHTML = '';
+  list.innerHTML = '';
 
-for (let category of categories) {
-  const categoryItem = document.createElement('div');
-  categoryItem.classList.add('mb-3');
-  categoryItem.innerHTML = `
-  <div class="columns is-vcentered is-mobile">
-    <div class="column">
-      <span class="tag is-primary is-light">${category.name}</span>
-    </div>
-    <div class="column is-narrow has-text"
-      <p class="is-fullwidth has-text-right-tablet">
-        <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
-        <a href="#" class="is-size-7 delete-link">Eliminar</a>
-      </p>
-    </div>
-  </div>`;
+  for (let category of categories) {
+    const categoryItem = document.createElement('div');
+    categoryItem.classList.add('mb-3');
+    categoryItem.innerHTML = `
+    <div class="columns is-vcentered is-mobile">
+      <div class="column">
+        <span class="tag is-primary is-light">${category.name}</span>
+      </div>
+      <div class="column is-narrow has-text"
+        <p class="is-fullwidth has-text-right-tablet">
+          <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
+          <a href="#" class="is-size-7 delete-link">Eliminar</a>
+        </p>
+      </div>
+    </div>`;
 
-  const editAction = categoryItem.querySelector('.edit-link');
-  const deleteAction = categoryItem.querySelector('.delete-link');
+    const editAction = categoryItem.querySelector('.edit-link');
+    const deleteAction = categoryItem.querySelector('.delete-link');
 
-  editAction.onclick = () => {
-    editCategorySection.style.display = 'block';
-    balanceSection.style.display = 'none';
-    categoriasSection.style.display = 'none';
-    reportesSection.style.display = 'none';
-    newOperationSection.style.display = 'none';
-    editCategory();
+    editAction.onclick = () => {
+      editCategorySection.style.display = 'block';
+      balanceSection.style.display = 'none';
+      categoriasSection.style.display = 'none';
+      reportesSection.style.display = 'none';
+      newOperationSection.style.display = 'none';
+      editCategory();
   }
 
   deleteAction.onclick = () => {
     // deleteCategory(category.id);
   }
-  printOperations(newArr)
-})
+  printOperations(categories)
+}}
 
 // Delete operations
 const deleteOperation = (idOperation) => {
@@ -370,7 +370,7 @@ const editOperationSection = document.getElementById('editOperationSection');
 const editDescription = document.getElementById('editDescription');
 const editAmount = document.getElementById('editAmount');
 const editType = document.getElementById('editType');
-const editCategory = document.getElementById('editCategory');
+const editCategoriesOp = document.getElementById('editCategoriesOp');
 const editDate = document.getElementById('editDate');
 const cancelEditOperation = document.getElementById('cancelEditOperation');
 const editNewOperation = document.getElementById('editNewOperation');
@@ -385,7 +385,7 @@ const editOperation = (idOperation) =>{
   editDescription.value = operations[editOperation].description;
   editAmount.value = operations[editOperation].amount;
   editType.value = operations[editOperation].type;
-  editCategory.value = operations[editOperation].category;
+  editCategoriesOp.value = operations[editOperation].category;
   editDate.value = operations[editOperation].date;
 
   cancelEditOperation.addEventListener('click', () =>{
@@ -399,7 +399,7 @@ const editOperation = (idOperation) =>{
       description: editDescription.value,
       amount: editAmount.value,
       type: editType.value,
-      category: editCategory.value,
+      category: editCategoriesOp.value,
       date: editDate.value
     }
 
@@ -434,7 +434,7 @@ const reportesCanvas = () =>{
 reportesCanvas();
 
 // Total per category
-const categories = ['education', 'work'];
+// const categories = ['education', 'work'];
 
 // const arr = [];
 // for (let i = 0; i < categories.length; i++) {
@@ -446,9 +446,7 @@ const categories = ['education', 'work'];
 // // console.log(arr);
 
 // const result = Math.max(...arr.map(value => value.gain));
-// console.log(result)
-
-
+// console.log(result);
 
 // BALANCE
 const earningsBalance = document.getElementById('earnings');
@@ -465,4 +463,4 @@ const balance = () =>{
   balanceBalance.innerHTML = `$${earnings - expenses}`;
 }
 
-balance();
+balance()
