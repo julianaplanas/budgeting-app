@@ -254,7 +254,7 @@ if(filterOrder.value === 'less-amount'){
 printOperations(newArr)
 })
 
-// CATEGORIES
+// --------------- START OF CATEGORIES -----------------
 
 // DOM
 const categoriesSelect = document.getElementById('filter-categories');
@@ -349,8 +349,42 @@ const updateCategoriesList = () => {
   deleteAction.onclick = () => {
     // deleteCategory(category.id);
   }
-  printOperations(categories)
+
+  list.append(categoryItem);
 }}
+
+updateCategoriesList();
+
+
+// --- KeyCode on edit categories input ---
+inputEditCategory.addEventListener("keyup", function (event) {
+  if (event.key === 'Enter') {
+    btnEditCategory.click();
+  }
+});
+
+// Edit category
+
+// Delete category
+
+// Start with all categories of local Storage
+// if (JSON.parse(localStorage.getItem('categories')) === null){
+//   categories = [
+//     {id:0, name:'Todas'},
+//     {id:1, name:'Comida'},
+//     {id:2, name:'Servicios'},
+//     {id:3, name:'Salidas'},
+//     {id:4, name:'Educación'},
+//     {id:5, name:'Transporte'},
+//     {id:6, name:'Trabajo'}
+//   ];
+// } else {
+//   categories = JSON.parse(localStorage.getItem('categories'));
+//   setValueCategoriesSelect(getCategoriesStorage);
+//   updateCategoriesList(getCategoriesStorage);
+// } 
+
+// -------------- END OF CATEGORIES ---------------------------
 
 // Delete operations
 const deleteOperation = (idOperation) => {
