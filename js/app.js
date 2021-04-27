@@ -35,12 +35,19 @@ const balanceSection = document.getElementById('balanceSection');
 const categoriasSection = document.getElementById('categoriasSection');
 const reportesSection = document.getElementById('reportesSection');
 
-btnCategorias.addEventListener('click', () => {
-  balanceSection.style.display = 'none';
-  categoriasSection.style.display = 'block';
-  reportesSection.style.display = 'none';
-  newOperationSection.style.display = 'none';
-  editCategorySection.style.display = 'none';
+btnBalance.addEventListener('click', ()=>{
+    balanceSection.style.display = 'block';
+    categoriasSection.style.display = 'none';
+    reportesSection.style.display = 'none';
+    newOperationSection.style.display = 'none';
+})
+
+btnCategorias.addEventListener('click', () =>{
+    balanceSection.style.display = 'none';
+    categoriasSection.style.display = 'block';
+    reportesSection.style.display = 'none';
+    newOperationSection.style.display = 'none';
+
 })
 
 btnReportes.addEventListener('click', () => {
@@ -62,6 +69,15 @@ const year = new Date().getFullYear();
 dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
+// Clear operations
+const clearOperations = () =>{
+  description.value = '';
+  amount.value = 0;
+  type.value = 'expense';
+  category.value = '';
+  dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+}
+
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
 const btnNewOperation = document.getElementById('new-operation');
@@ -70,7 +86,7 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
-  // setTodayDate(dateInput);
+  clearOperations();
   newOperationSection.style.display = 'block';
   balanceSection.style.display = 'none';
 })
@@ -97,20 +113,12 @@ const categoryOp = document.getElementById('category');
 
 let amountStyle;
 
-// Clear operations
-const clearOperations = () =>{
-  description.value = '';
-  amount.value = 0;
-  type.value = 'expense';
-  category.value = '';
-  dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-}
-
 // Print operations in HTML
 const printOperations = (operations)=>{
   withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
-      const codeBox = `<div id="${operations[i].id}" class="columns">
+      const codeOperation = document.createElement('div');
+      codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns">
           <div class="column is-3 description-style">${operations[i].description}</div> 
           <div class="column is-3 category-style">${operations[i].category}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
@@ -120,7 +128,19 @@ const printOperations = (operations)=>{
             <a class="delete-op">Eliminar</a>
           </div> 
       </div>`
-      withOperations.insertAdjacentHTML('beforeend', codeBox)
+
+      const editButton = codeOperation.querySelector('.edit-op')
+      const deleteButton = codeOperation.querySelector('.delete-op')
+
+      editButton.onclick = () => {
+        editOperation(operations[i].id);
+      }
+      
+      deleteButton.onclick = () => {
+        deleteOperation(operations[i].id);
+      }
+      
+      withOperations.append(codeOperation)
   }
 }
 
@@ -151,14 +171,14 @@ printOperations(operationsLocalStorage);
 })
 
 // Start with all operations of local Storage
-if(JSON.parse(localStorage.getItem('operations')) === null){
-withOperations.classList.add('display');
-noOperations.classList.remove('display');
+if(operations.length < 1){
+  withOperations.style.display = 'none';
+  noOperations.style.display = 'block';
 } else{
-withOperations.classList.remove('display');
-noOperations.classList.add('display');
-operations = JSON.parse(localStorage.getItem('operations'));
-printOperations(operations);
+  withOperations.style.display = 'block';
+  noOperations.style.display = 'none';
+  operations = JSON.parse(localStorage.getItem('operations'));
+  printOperations(operations);
 }
 
 // FILTERS
@@ -186,18 +206,17 @@ const filterType = document.getElementById('filter-type');
 const filterCategories = document.getElementById('filter-categories');
 
 const filters = (e) =>{
-let atr = '';
-if(e.target.id === 'filter-type'){
-  operationsFiltered = [...operations];
-  filterCategories.value = 'all';
-  atr = 'type';
-} else{
-  filterType.value = 'all';
-  atr = 'category'
-}
-// puede haber error por la mayuscula o minuscula de los values/ingles y español
-operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
-e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
+  let atr = '';
+  if(e.target.id === 'filter-type'){
+    operationsFiltered = [...operations];
+    filterCategories.value = 'all';
+    atr = 'type';
+  } else{
+    filterType.value = 'all';
+    atr = 'category'
+  }
+  operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
+  e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
 }
 
 filterCategories.addEventListener('change', (e) => {filters(e)});
@@ -332,6 +351,67 @@ for (let category of categories) {
   }
   printOperations(newArr)
 })
+
+// Delete operations
+const deleteOperation = (idOperation) => {
+  operations = operations.filter(operation => operation.id !== idOperation);
+  localStorage.setItem('operations', JSON.stringify(operations));
+  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+  printOperations(operationsLocalStorage);
+
+  if(operations.length < 1){
+    withOperations.style.display = 'none';
+    noOperations.style.display = 'block';
+  }
+}
+
+// Edit operations
+const editOperationSection = document.getElementById('editOperationSection');
+const editDescription = document.getElementById('editDescription');
+const editAmount = document.getElementById('editAmount');
+const editType = document.getElementById('editType');
+const editCategory = document.getElementById('editCategory');
+const editDate = document.getElementById('editDate');
+const cancelEditOperation = document.getElementById('cancelEditOperation');
+const editNewOperation = document.getElementById('editNewOperation');
+
+const editOperation = (idOperation) =>{
+  editOperationSection.style.display = 'block';
+  balanceSection.style.display = 'none';
+  
+  // const editOperation = operations.filter(operation => operation.id === idOperation);
+  const editOperation = operations.findIndex((operation) => operation.id === idOperation);
+
+  editDescription.value = operations[editOperation].description;
+  editAmount.value = operations[editOperation].amount;
+  editType.value = operations[editOperation].type;
+  editCategory.value = operations[editOperation].category;
+  editDate.value = operations[editOperation].date;
+
+  cancelEditOperation.addEventListener('click', () =>{
+    editOperationSection.style.display = 'none';
+    balanceSection.style.display = 'block';
+  })
+
+  editNewOperation.addEventListener('click', ()=>{
+    const newOp = {
+      id: idOperation,
+      description: editDescription.value,
+      amount: editAmount.value,
+      type: editType.value,
+      category: editCategory.value,
+      date: editDate.value
+    }
+
+    operations[editOperation] = newOp;
+    localStorage.setItem('operations', JSON.stringify(operations));
+    const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+    printOperations(operationsLocalStorage);
+
+    editOperationSection.style.display = 'none';
+    balanceSection.style.display = 'block';
+  })
+}
 
 // REPORTES
 
