@@ -273,6 +273,82 @@
     </section>
       <!-- END OF NUEVA OPERACION -->
 
+    <!-- START OF EDITAR OPERACION -->
+    <section class="section mt-5 vista display" id="editOperationSection">
+      <article class="container">
+        <div class="columns">
+          <div class="column is-8 is-offset-2">
+            <div class="box">
+              <!-- Subtitle -->
+              <h2 class="subtitle">Editar operación</h2>
+
+              <!-- Descripcion input -->
+              <div class="field">
+                <label for="editDescription" class="label">Descripción</label>
+                <div class="control">
+                  <input id="editDescription" class="input" type="text">
+                </div>
+              </div>
+
+              <!-- Monto input -->
+              <div class="field">
+                <label for="editAmount" class="label">Monto</label>
+                <div class="control">
+                  <input id="editAmount" class="input" type="number" value="0">
+                </div>
+              </div>
+
+              <!-- Tipo select -->
+              <div class="field">
+                <label for="editType" class="label">Tipo</label>
+                <div class="control ">
+                  <div class="select is-fullwidth">
+                    <select id="editType">
+                      <option value="expense">Gasto</option>
+                      <option value="gain">Ganancia</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Categoria select -->
+              <div class="field">
+                <label for="editCategory" class="label">Categoría</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="editCategory">
+                      <option value='education'>Educación</option>
+                      <option value='work'>Trabajo</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fecha select -->
+              <div class="field">
+                <label for="editDate" class="label">Fecha</label>
+                <div class="control is-fullwidth">
+                  <input id="editDate" class="input" type="date">
+                </div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="field is-grouped is-grouped-right new-op-buttons">
+                <p class="control">
+                  <a class="button is-light" id="cancelEditOperation">
+                    Cancelar
+                  </a>
+                </p>
+                <p class="control">
+                  <a class="button add-new-op-button" id="editNewOperation">
+                    Editar
+                  </a>
+                </p>
+              </div>
+      </article>
+    </section>
+      <!-- END OF EDITAR OPERACION -->
+
       <!-- START OF CATEGORIAS -->
       <section class="section mt-5 vista display" id="categoriasSection">
         <article class="container">

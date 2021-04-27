@@ -67,6 +67,15 @@ const year = new Date().getFullYear();
 dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
+// Clear operations
+const clearOperations = () =>{
+  description.value = '';
+  amount.value = 0;
+  type.value = 'expense';
+  category.value = '';
+  dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+}
+
 // NEW OPERATION: OPEN FORM AND CLOSE FORM
 
 const btnNewOperation = document.getElementById('new-operation');
@@ -75,6 +84,7 @@ const btnCancelNewOperation = document.getElementById('cancelNewOperation');
 const newOperationSection = document.getElementById('newOperationSection');
 
 btnNewOperation.addEventListener('click', ()=>{
+  clearOperations();
   newOperationSection.style.display = 'block';
   balanceSection.style.display = 'none';
 })
@@ -101,15 +111,6 @@ const category = document.getElementById('category');
 
 let amountStyle;
 
-// Clear operations
-const clearOperations = () =>{
-  description.value = '';
-  amount.value = 0;
-  type.value = 'expense';
-  category.value = '';
-  dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-}
-
 // Print operations in HTML
 const printOperations = (operations)=>{
   withOperations.innerHTML = '';
@@ -129,9 +130,9 @@ const printOperations = (operations)=>{
       const editButton = codeOperation.querySelector('.edit-op')
       const deleteButton = codeOperation.querySelector('.delete-op')
 
-      editButton.addEventListener('click', () =>{
-        console.log('editar');
-      });
+      editButton.onclick = () => {
+        editOperation(operations[i].id);
+      }
       
       deleteButton.onclick = () => {
         deleteOperation(operations[i].id);
@@ -165,12 +166,12 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
 })
 
 // Start with all operations of local Storage
-if(JSON.parse(localStorage.getItem('operations')) === null){
-  withOperations.classList.add('display');
-  noOperations.classList.remove('display');
+if(operations.length < 1){
+  withOperations.style.display = 'none';
+  noOperations.style.display = 'block';
 } else{
-  withOperations.classList.remove('display');
-  noOperations.classList.add('display');
+  withOperations.style.display = 'block';
+  noOperations.style.display = 'none';
   operations = JSON.parse(localStorage.getItem('operations'));
   printOperations(operations);
 }
@@ -248,7 +249,7 @@ filterOrder.addEventListener('change', ()=>{
   printOperations(newArr)
 })
 
-// Edit and delete operations
+// Delete operations
 const deleteOperation = (idOperation) => {
   operations = operations.filter(operation => operation.id !== idOperation);
   localStorage.setItem('operations', JSON.stringify(operations));
@@ -261,44 +262,50 @@ const deleteOperation = (idOperation) => {
   }
 }
 
+// Edit operations
+const editOperationSection = document.getElementById('editOperationSection');
+const editDescription = document.getElementById('editDescription');
+const editAmount = document.getElementById('editAmount');
+const editType = document.getElementById('editType');
+const editCategory = document.getElementById('editCategory');
+const editDate = document.getElementById('editDate');
+const cancelEditOperation = document.getElementById('cancelEditOperation');
+const editNewOperation = document.getElementById('editNewOperation');
 
+const editOperation = (idOperation) =>{
+  editOperationSection.style.display = 'block';
+  balanceSection.style.display = 'none';
+  
+  // const editOperation = operations.filter(operation => operation.id === idOperation);
+  const editOperation = operations.findIndex((operation) => operation.id === idOperation);
 
+  editDescription.value = operations[editOperation].description;
+  editAmount.value = operations[editOperation].amount;
+  editType.value = operations[editOperation].type;
+  editCategory.value = operations[editOperation].category;
+  editDate.value = operations[editOperation].date;
 
-// const editarOperacion = (idOperacion, operacionNueva, operaciones) => {
-//   return operaciones.map((operacion) =>
-//     operacion.id === idOperacion
-//       ? { id: operacion.id, ...operacionNueva }
-//       : operacion
-//   )
-// }
+  cancelEditOperation.addEventListener('click', () =>{
+    editOperationSection.style.display = 'none';
+    balanceSection.style.display = 'block';
+  })
 
-// const cargarDatosOperacion = (id) => {
-//   const operacion = obtenerOperacion(id, obtenerOperaciones())
-//   $('#editar-descripcion-input').value = operacion.descripcion
-//   $('#editar-monto-input').value = operacion.monto
-//   $('#editar-categorias-select').value = operacion.categoria
-//   $('#editar-fecha-input').valueAsDate = new Date(operacion.fecha)
-//   $('#editar-tipo-operacion').value = operacion.tipo.toUpperCase()
-//   $('#editar-operacion-boton').onclick = () => editarOperacionHandler(id)
-// }
+  editNewOperation.addEventListener('click', ()=>{
+    const newOp = {
+      id: idOperation,
+      description: editDescription.value,
+      amount: editAmount.value,
+      type: editType.value,
+      category: editCategory.value,
+      date: editDate.value
+    }
 
-// const editarOperacionHandler = (id) => {
-//   const descripcion = $('#editar-descripcion-input').value
-//   const monto = Number($('#editar-monto-input').value)
-//   const categoria = $('#editar-categorias-select').value
-//   const tipo = $('#editar-tipo-operacion').value
-//   const fecha = $('#editar-fecha-input').value.replace(/-/g, '/')
+    operations[editOperation] = newOp;
+    localStorage.setItem('operations', JSON.stringify(operations));
+    const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+    printOperations(operationsLocalStorage);
 
-//   const operaciones = editarOperacion(
-//     id,
-//     {
-//       descripcion,
-//       monto,
-//       categoria,
-//       tipo,
-//       fecha,
-//     },
-//     obtenerOperaciones()
-//   )
-//   actualizarDatos({ operaciones })
-// }
+    editOperationSection.style.display = 'none';
+    balanceSection.style.display = 'block';
+  })
+}
