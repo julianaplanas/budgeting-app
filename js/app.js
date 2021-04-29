@@ -58,6 +58,16 @@ btnReportes.addEventListener('click', () => {
   editCategorySection.style.display = 'none';
 })
 
+// Categories
+let categories = [
+  {id: uuid.v4(), name:'Todas'},
+  {id: uuid.v4(), name:'Comida'},
+  {id: uuid.v4(), name:'Servicios'},
+  {id: uuid.v4(), name:'Salidas'},
+  {id: uuid.v4(), name:'Educación'},
+  {id: uuid.v4(), name:'Transporte'},
+  {id: uuid.v4(), name:'Trabajo'}];
+
 // NEW OPERATION: DATE INPUT
 const dateInput = document.getElementById('date-input');
 const filterDate = document.getElementById('filter-date');
@@ -74,7 +84,7 @@ const clearOperations = () =>{
   description.value = '';
   amount.value = 0;
   type.value = 'expense';
-  category.value = '';
+  category.value = categories[0].name;
   dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 }
 
@@ -254,138 +264,6 @@ if(filterOrder.value === 'less-amount'){
 printOperations(newArr)
 })
 
-// --------------- START OF CATEGORIES -----------------
-
-// DOM
-const categoriesSelect = document.getElementById('filter-categories');
-const inputCategories = document.getElementById('category-name');
-const categoriesList = document.getElementById('categories-list');
-const btnAddCategory = document.getElementById('btn-add-category');
-
-const editCategorySection = document.getElementById('edit-category-section');
-const inputEditCategory = document.getElementById('edit-category-input');
-const btnEditCategory = document.getElementById('edit-category-button');
-const btnCancelEditCategory = document.getElementById('cancel-category-button');
-
-// Categories
-let categories = [];
-
-// -----  Local storage  -----
-localStorage.setItem('categories', JSON.stringify(categories));
-const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
-
-// Add new category
-
-btnAddCategory.addEventListener("click", () => {
-
-  const newCategory = inputCategories.value.replace(/^\s+|\s+$/gm, '');
-
-  if (newCategory === '') {
-    return false;
-  }
-
-  categories.push({id:categories.length, name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
-
-  localStorage.setItem('categories', JSON.stringify(categories));
-  const getCategoriesStorage = JSON.parse(localStorage.getItem('categories'));
-  setValueCategoriesSelect(getCategoriesStorage);
-  updateCategoriesList(getCategoriesStorage);
-
-  inputCategories.value = '';
-
-});
-
-// --- KeyCode on new category input ---
-inputCategories.addEventListener("keyup", function (event) {
-  if (event.key === 'Enter') {
-    btnAddCategory.click();
-  }
-});
-
-// Print categories on select filter
-const setValueCategoriesSelect = () => {
-  categoriesSelect.innerHTML = '';
-  categories.forEach(
-    (category, index) =>
-    (categoriesSelect.options[index] = new Option(category.name, category.id))
-)};
-
-setValueCategoriesSelect();
-
-// Print category on categories list
-const updateCategoriesList = () => {
-  const list = categoriesList;
-
-  list.innerHTML = '';
-
-  for (let category of categories) {
-    const categoryItem = document.createElement('div');
-    categoryItem.classList.add('mb-3');
-    categoryItem.innerHTML = `
-    <div class="columns is-vcentered is-mobile">
-      <div class="column">
-        <span class="tag is-primary is-light">${category.name}</span>
-      </div>
-      <div class="column is-narrow has-text"
-        <p class="is-fullwidth has-text-right-tablet">
-          <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
-          <a href="#" class="is-size-7 delete-link">Eliminar</a>
-        </p>
-      </div>
-    </div>`;
-
-    const editAction = categoryItem.querySelector('.edit-link');
-    const deleteAction = categoryItem.querySelector('.delete-link');
-
-    editAction.onclick = () => {
-      editCategorySection.style.display = 'block';
-      balanceSection.style.display = 'none';
-      categoriasSection.style.display = 'none';
-      reportesSection.style.display = 'none';
-      newOperationSection.style.display = 'none';
-      editCategory();
-  }
-
-  deleteAction.onclick = () => {
-    // deleteCategory(category.id);
-  }
-
-  list.append(categoryItem);
-}}
-
-updateCategoriesList();
-
-
-// --- KeyCode on edit categories input ---
-inputEditCategory.addEventListener("keyup", function (event) {
-  if (event.key === 'Enter') {
-    btnEditCategory.click();
-  }
-});
-
-// Edit category
-
-// Delete category
-
-// Start with all categories of local Storage
-// if (JSON.parse(localStorage.getItem('categories')) === null){
-//   categories = [
-//     {id:0, name:'Todas'},
-//     {id:1, name:'Comida'},
-//     {id:2, name:'Servicios'},
-//     {id:3, name:'Salidas'},
-//     {id:4, name:'Educación'},
-//     {id:5, name:'Transporte'},
-//     {id:6, name:'Trabajo'}
-//   ];
-// } else {
-//   categories = JSON.parse(localStorage.getItem('categories'));
-//   setValueCategoriesSelect(getCategoriesStorage);
-//   updateCategoriesList(getCategoriesStorage);
-// } 
-
-// -------------- END OF CATEGORIES ---------------------------
-
 // Delete operations
 const deleteOperation = (idOperation) => {
   operations = operations.filter(operation => operation.id !== idOperation);
@@ -446,6 +324,197 @@ const editOperation = (idOperation) =>{
     balanceSection.style.display = 'block';
   })
 }
+
+// --------------- START OF CATEGORIES -----------------
+
+// DOM
+const categoriesSelect = document.getElementById('filter-categories');
+const inputCategories = document.getElementById('category-name');
+const categoriesList = document.getElementById('categories-list');
+const btnAddCategory = document.getElementById('btn-add-category');
+
+const editCategorySection = document.getElementById('edit-category-section');
+const inputEditCategory = document.getElementById('edit-category-input');
+const btnEditCategory = document.getElementById('edit-category-button');
+const btnCancelEditCategory = document.getElementById('cancel-category-button');
+
+const categoryNewOp = document.getElementById('category');
+
+const editCategoriesOpOptions = document.getElementById('edit-categories-op-select');
+
+
+// Print categories on select filter
+const setValueCategoriesSelect = () => {
+  categoriesSelect.innerHTML = '';
+  categories.forEach((category, index) =>
+    (categoriesSelect.options[index] = new Option(category.name, category.id))
+)};
+
+setValueCategoriesSelect();
+
+const newOpCategoriesSelect = () => {
+  categoryNewOp.innerHTML = '';
+  categories.forEach((category, index) =>
+    (categoryNewOp.options[index] = new Option(category.name, category.id))
+)};
+
+newOpCategoriesSelect();
+
+const editCategoriesOpSelect = () => {
+  editCategoriesOpOptions.innerHTML = '';
+  categories.forEach((category, index) =>
+    (editCategoriesOpOptions.options[index] = new Option(category.name, category.id))
+)};
+
+editCategoriesOpSelect();
+
+// Add new category
+btnAddCategory.addEventListener("click", () => {
+
+  const newCategory = inputCategories.value.replace(/^\s+|\s+$/gm, '');
+
+  if (newCategory === '') {
+    return false;
+  }
+
+  categories.push({id: uuid.v4(), name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
+  localStorage.setItem('categories', JSON.stringify(categories));
+  const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));  
+  setValueCategoriesSelect(categories);
+  updateCategoriesList(categories);
+  newOpCategoriesSelect(categories);
+  editCategoriesOpSelect(categories);
+
+  inputCategories.value = '';
+
+});
+
+// --- KeyCode on new category input ---
+inputCategories.addEventListener("keyup", function (event) {
+  if (event.key === 'Enter') {
+    btnAddCategory.click();
+  }
+});
+
+// Print category on categories list
+const updateCategoriesList = () => {
+  categoriesList.innerHTML = '';
+
+  for (let i = 0; i < categories.length; i++) {
+    const categoryItem = document.createElement('div');
+    categoryItem.classList.add('mb-3');
+    categoryItem.innerHTML = `
+    <div class="columns is-vcentered is-mobile">
+      <div class="column">
+        <span class="tag is-primary is-light">${categories[i].name}</span>
+      </div>
+      <div class="column is-narrow has-text"
+        <p class="is-fullwidth has-text-right-tablet">
+          <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
+          <a href="#" class="is-size-7 delete-link">Eliminar</a>
+        </p>
+      </div>
+    </div>`;
+
+    const editAction = categoryItem.querySelector('.edit-link');
+    const deleteAction = categoryItem.querySelector('.delete-link');
+
+    editAction.onclick = () => {
+      editCategorySection.style.display = 'block';
+      balanceSection.style.display = 'none';
+      categoriasSection.style.display = 'none';
+      reportesSection.style.display = 'none';
+      newOperationSection.style.display = 'none';
+      editCategory(category[i].id);
+    }
+
+    deleteAction.onclick = () => {
+      deleteCategory(category[i].id);
+    }
+
+    categoriesList.append(categoryItem);
+}}
+
+updateCategoriesList();
+
+// --- KeyCode on edit categories input ---
+inputEditCategory.addEventListener("keyup", function (event) {
+  if (event.key === 'Enter') {
+    btnEditCategory.click();
+  }
+});
+
+// Edit category
+const editCategory = (idCategory) => {
+  const index = categories.findIndex((category) => category.id === idCategory);
+
+  inputEditCategory.value = categories[index].name}
+
+  btnCancelEditCategory.addEventListener('click', () => {
+    editCategorySection.style.display = 'none';
+    categoriasSection.style.display = 'block';
+});
+
+btnEditCategory.addEventListener('click', () => {
+  const renameCategory = {
+    id: category.id,
+    name: inputEditCategory.value
+  };
+
+  categories[editCategory] = renameCategory;
+  localStorage.setItem('categories', JSON.stringify(categories));
+  const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
+  setValueCategoriesSelect(categoriesGetStorage);
+  updateCategoriesList(categoriesGetStorage);
+  newOpCategoriesSelect(categoriesGetStorage);
+  editCategoriesOpSelect(categoriesGetStorage);
+
+  editCategorySection.style.display = 'none';
+  categoriasSection.style.display = 'block';
+})
+
+// Delete category
+// const deleteCategory = (idCategory) => {
+//   categories = categories.filter(category => category.id !== idCategory);
+//   localStorage.setItem('categories', JSON.stringify(categories));
+//   const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
+//   updateCategoriesList(categories);
+// }
+
+const deleteCategory = (category) => {
+  const categoryName = categories.find((elem) => elem.id === category);
+  const value = categories.findIndex((elem) => elem.id === category);
+  if (value >= 0) {
+    categories.splice(value, 1);
+    localStorage.setItem('categories', JSON.stringify(categories));
+    setValueCategoriesSelect(categoriesGetStorage);
+    updateCategoriesList(categoriesGetStorage);
+    newOpCategoriesSelect(categoriesGetStorage);
+    editCategoriesOpSelect(categoriesGetStorage);
+  }
+  operations.forEach(() => {
+    const index = operations.findIndex(
+      (operation) => operation.category === categoryName.name
+    );
+    if (index >= 0) {
+      operations.splice(index, 1);
+      localStorage.setItem('operations', JSON.stringify(operations))
+    }
+    printOperations(operations);
+  });
+};
+
+// Start with all categories of local Storage
+
+categories = JSON.parse(localStorage.getItem("categoriesGetStorage")) ?? categories;
+
+  setValueCategoriesSelect(categories);
+  updateCategoriesList(categories);
+  newOpCategoriesSelect(categories);
+  editCategoriesOpSelect(categories);
+
+
+// -------------- END OF CATEGORIES ---------------------------
 
 // REPORTES
 
