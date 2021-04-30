@@ -129,7 +129,7 @@ const printOperations = (operations)=>{
       const codeOperation = document.createElement('div');
       codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns">
           <div class="column is-3 description-style">${operations[i].description}</div> 
-          <div class="column is-3 category-style">${operations[i].category}</div>
+          <div class="column is-3 category-style">${operations[i].category[0].name}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
           <div class="column is-2 has-text-right ${operations[i].type === 'gain' ? 'gain-style' : 'expense-style'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
           <div class="column is-2 has-text-right">
@@ -339,8 +339,6 @@ const inputEditCategory = document.getElementById('edit-category-input');
 const btnEditCategory = document.getElementById('edit-category-button');
 const btnCancelEditCategory = document.getElementById('cancel-category-button');
 
-const categoryNewOp = document.getElementById('category');
-
 const editCategoriesOpOptions = document.getElementById('edit-categories-op-select');
 
 
@@ -354,9 +352,9 @@ const setValueCategoriesSelect = () => {
 setValueCategoriesSelect();
 
 const newOpCategoriesSelect = () => {
-  categoryNewOp.innerHTML = '';
+  categoryOp.innerHTML = '';
   categories.forEach((category, index) =>
-    (categoryNewOp.options[index] = new Option(category.name, category.id))
+    (categoryOp.options[index] = new Option(category.name, category.id))
 )};
 
 newOpCategoriesSelect();
@@ -426,11 +424,11 @@ const updateCategoriesList = () => {
       categoriasSection.style.display = 'none';
       reportesSection.style.display = 'none';
       newOperationSection.style.display = 'none';
-      editCategory(category[i].id);
+      editCategory(categories[i].id);
     }
 
     deleteAction.onclick = () => {
-      deleteCategory(category[i].id);
+      deleteCategory(categories[i].id);
     }
 
     categoriesList.append(categoryItem);
@@ -449,7 +447,7 @@ inputEditCategory.addEventListener("keyup", function (event) {
 const editCategory = (idCategory) => {
   const index = categories.findIndex((category) => category.id === idCategory);
 
-  inputEditCategory.value = categories[index].name}
+  inputEditCategory.value = categories[index]}
 
   btnCancelEditCategory.addEventListener('click', () => {
     editCategorySection.style.display = 'none';
@@ -474,36 +472,38 @@ btnEditCategory.addEventListener('click', () => {
   categoriasSection.style.display = 'block';
 })
 
-// Delete category
-// const deleteCategory = (idCategory) => {
-//   categories = categories.filter(category => category.id !== idCategory);
-//   localStorage.setItem('categories', JSON.stringify(categories));
-//   const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
-//   updateCategoriesList(categories);
-// }
+editCategory()
 
-const deleteCategory = (category) => {
-  const categoryName = categories.find((elem) => elem.id === category);
-  const value = categories.findIndex((elem) => elem.id === category);
-  if (value >= 0) {
-    categories.splice(value, 1);
-    localStorage.setItem('categories', JSON.stringify(categories));
-    setValueCategoriesSelect(categoriesGetStorage);
-    updateCategoriesList(categoriesGetStorage);
-    newOpCategoriesSelect(categoriesGetStorage);
-    editCategoriesOpSelect(categoriesGetStorage);
-  }
-  operations.forEach(() => {
-    const index = operations.findIndex(
-      (operation) => operation.category === categoryName.name
-    );
-    if (index >= 0) {
-      operations.splice(index, 1);
-      localStorage.setItem('operations', JSON.stringify(operations))
-    }
-    printOperations(operations);
-  });
-};
+// Delete category
+const deleteCategory = (idCategory) => {
+  categories = categories.filter(category => category.id !== idCategory);
+  localStorage.setItem('categories', JSON.stringify(categories));
+  const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
+  updateCategoriesList(categoriesGetStorage);
+}
+deleteCategory();
+
+// const deleteCategory = (category) => {
+//   const categoryName = categories.find((elem) => elem.id === category);
+//   const value = categories.findIndex((elem) => elem.id === category);
+//   if (value >= 0) {
+//     categories.splice(value, 1);
+//     localStorage.setItem('categories', JSON.stringify(categories));
+//     const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
+//     setValueCategoriesSelect(categoriesGetStorage);
+//     updateCategoriesList(categoriesGetStorage);
+//     newOpCategoriesSelect(categoriesGetStorage);
+//     editCategoriesOpSelect(categoriesGetStorage);
+//   }
+//   operations.forEach(() => {
+//     const index = operations.findIndex((operation) => operation.category === categoryName);
+//     if (index >= 0) {
+//       operations.splice(index, 1);
+//       localStorage.setItem('operations', JSON.stringify(operations))
+//     }
+//     printOperations(operations);
+//   });
+// };
 
 // Start with all categories of local Storage
 
