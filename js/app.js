@@ -1,7 +1,4 @@
-// $ = (selector) => document.querySelector(selector);
-// $ = (selector) =>document.querySelectorAll(selector);
-
-// BURGER NAVBAR
+// --------------- START OF BURGER NAVBAR -----------------
 document.addEventListener('DOMContentLoaded', () => {
   // Get all "navbar-burger" elements
   const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
@@ -25,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+// --------------- END OF BURGER NAVBAR -----------------
 
-// NAVBAR BUTTONS
+// --------------- START OF NAVBAR -----------------
 const btnBalance = document.getElementById('btnBalance');
 const btnCategorias = document.getElementById('btnCategorias');
 const btnReportes = document.getElementById('btnReportes');
@@ -57,16 +55,17 @@ btnReportes.addEventListener('click', () => {
   newOperationSection.style.display = 'none';
   editCategorySection.style.display = 'none';
 })
+// --------------- END OF NAVBAR -----------------
 
-// Categories
+// --------------- START OF NEW OPERATION -----------------
 let categories = [
-  {id: uuid.v4(), name:'Todas'},
-  {id: uuid.v4(), name:'Comida'},
-  {id: uuid.v4(), name:'Servicios'},
-  {id: uuid.v4(), name:'Salidas'},
-  {id: uuid.v4(), name:'Educación'},
-  {id: uuid.v4(), name:'Transporte'},
-  {id: uuid.v4(), name:'Trabajo'}];
+  // {id: uuid.v4(), name:'Todas'},
+  {name:'Comida', id: uuid.v4()},
+  {name:'Servicios', id: uuid.v4()},
+  {name:'Salidas', id: uuid.v4()},
+  {name:'Educación', id: uuid.v4()},
+  {name:'Transporte', id: uuid.v4()},
+  {name:'Trabajo', id: uuid.v4()}];
 
 // NEW OPERATION: DATE INPUT
 const dateInput = document.getElementById('date-input');
@@ -84,7 +83,7 @@ const clearOperations = () =>{
   description.value = '';
   amount.value = 0;
   type.value = 'expense';
-  category.value = categories[0].name;
+  categoryOp.value = `${categories[0].name}`;
   dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 }
 
@@ -154,45 +153,45 @@ const printOperations = (operations)=>{
   }
 }
 
-// Create new operation in JS
-btnAcceptNewOperation.addEventListener('click', ()=>{
-const newOp = {
-    id: uuid.v4(),
-    description: description.value,
-    amount: amount.value,
-    type: type.value,
-    category: categoryOp.value,
-    date: dateInput.value
-}
-
-operations.push(newOp);
-localStorage.setItem('operations', JSON.stringify(operations));
-const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
-printOperations(operationsLocalStorage);
-
-  clearOperations();
-  reportesCanvas();
-  balance();
-  
-  newOperationSection.style.display = 'none';
-  balanceSection.style.display = 'block';
-  noOperations.style.display = 'none';
-  withOperations.style.display = 'block';
-})
-
 // Start with all operations of local Storage
-if(operations.length > 1){
+operations = JSON.parse(localStorage.getItem('operations'));
+if(!operations || operations.length === 0){
   withOperations.style.display = 'none';
   noOperations.style.display = 'block';
 } else{
   withOperations.style.display = 'block';
   noOperations.style.display = 'none';
-  operations = JSON.parse(localStorage.getItem('operations'));
   printOperations(operations);
 }
 
-// FILTERS
+// Create new operation in JS
+btnAcceptNewOperation.addEventListener('click', ()=>{
+  const newOp = {
+      id: uuid.v4(),
+      description: description.value,
+      amount: amount.value,
+      type: type.value,
+      category: categoryOp.value,
+      date: dateInput.value
+  }
 
+  operations.push(newOp);
+  localStorage.setItem('operations', JSON.stringify(operations));
+  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+  printOperations(operationsLocalStorage);
+
+    clearOperations();
+    reportesCanvas();
+    balance();
+    
+    newOperationSection.style.display = 'none';
+    balanceSection.style.display = 'block';
+    noOperations.style.display = 'none';
+    withOperations.style.display = 'block';
+  })
+// --------------- END OF NEW OPERATIONS -----------------
+
+// --------------- START OF FILTERS -----------------
 // Show and unshow filters box
 const toggleFilters = document.getElementById('toggle-filters');
 const filtersBox = document.getElementById('filters');
@@ -219,14 +218,14 @@ const filters = (e) =>{
   let atr = '';
   if(e.target.id === 'filter-type'){
     operationsFiltered = [...operations];
-    filterCategories.value = 'all';
+    filterCategories.value = 'Todas';
     atr = 'type';
   } else{
-    filterType.value = 'all';
+    filterType.value = 'Todas';
     atr = 'category'
   }
   operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
-  e.target.value === 'all' ? printOperations(operations) : printOperations(operationsFiltered);
+  e.target.value === 'Todas' ? printOperations(operations) : printOperations(operationsFiltered);
 }
 
 filterCategories.addEventListener('change', (e) => {filters(e)});
@@ -263,7 +262,9 @@ if(filterOrder.value === 'less-amount'){
 }
 printOperations(newArr)
 })
+// --------------- END OF FILTERS -----------------
 
+// --------------- START OF DELETE AND EDIT OPERATIONS -----------------
 // Delete operations
 const deleteOperation = (idOperation) => {
   operations = operations.filter(operation => operation.id !== idOperation);
@@ -297,7 +298,7 @@ const editOperation = (idOperation) =>{
   editDescription.value = operations[editOperation].description;
   editAmount.value = operations[editOperation].amount;
   editType.value = operations[editOperation].type;
-  editCategoriesOp.value = operations[editOperation].category;
+  // editCategoriesOp.value = operations[editOperation].category;
   editDate.value = operations[editOperation].date;
 
   cancelEditOperation.addEventListener('click', () =>{
@@ -324,9 +325,9 @@ const editOperation = (idOperation) =>{
     balanceSection.style.display = 'block';
   })
 }
+// --------------- END OF DELETE AND EDIT OPERATIONS -----------------
 
 // --------------- START OF CATEGORIES -----------------
-
 // DOM
 const categoriesSelect = document.getElementById('filter-categories');
 const inputCategories = document.getElementById('category-name');
@@ -516,8 +517,7 @@ categories = JSON.parse(localStorage.getItem("categoriesGetStorage")) ?? categor
 
 // -------------- END OF CATEGORIES ---------------------------
 
-// REPORTES
-
+// --------------- START OF REPORTES -----------------
 // Show or unshow report section
 const noReports = document.getElementById('no-reports');
 const withReports = document.getElementById('with-reports');
@@ -550,8 +550,10 @@ reportesCanvas();
 
 // const result = Math.max(...arr.map(value => value.gain));
 // console.log(result);
+// --------------- END OF REPORTES -----------------
 
-// BALANCE
+
+// --------------- START OF BALANCES -----------------
 const earningsBalance = document.getElementById('earnings');
 const expensesBalance = document.getElementById('expenses');
 const balanceBalance = document.getElementById('balance');
@@ -567,3 +569,4 @@ const balance = () =>{
 }
 
 balance()
+// --------------- END OF BALANCES -----------------
