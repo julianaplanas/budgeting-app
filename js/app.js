@@ -333,13 +333,13 @@ const setValueCategoriesSelect = (categories) => {
 const newOpCategoriesSelect = (categories) => {
   categoryOp.innerHTML = '';
 
-  // for (let i = 1; i < categories.length; i++) {
-  //   if (categories[i].name !== 'Todas') {
-  //     categoryOp.options[i] = new Option(categories[i].name, categories[i].name)
-  //   }
-  // }
+  for (let i = 1; i < categories.length; i++) {
+    if (categories[i].name !== 'Todas') {
+      categoryOp.options[i] = new Option(categories[i].name, categories[i].name)
+    }
+  }
 
-  categories.forEach((category, index) => categoryOp.options[index] = new Option(category.name, category.name))
+  // categories.forEach((category, index) => categoryOp.options[index] = new Option(category.name, category.name))
 };
 
 const editCategoriesOpSelect = (categories) => {
@@ -382,12 +382,14 @@ const updateCategoriesList = () => {
   categoriesList.innerHTML = '';
 
   for (let i = 0; i < categories.length; i++) {
+    if(categories[i].name !== 'Todas'){
+
     const categoryItem = document.createElement('div');
     categoryItem.classList.add('mb-3');
     categoryItem.innerHTML = `
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <span class="tag is-primary is-light">${categories[i].name !== "Todas" ? categories[i].name : false}</span>
+        <span class="tag is-primary is-light">${categories[i].name}</span>
       </div>
       <div class="column is-narrow has-text"
         <p class="is-fullwidth has-text-right-tablet">
@@ -414,7 +416,8 @@ const updateCategoriesList = () => {
     }
 
     categoriesList.append(categoryItem);
-}}
+  }}
+}
 
 // --- KeyCode on edit categories input ---
 inputEditCategory.addEventListener("keyup", function (event) {
@@ -515,7 +518,7 @@ balance()
 
 // --------------- START WITH LOCAL STORAGE -----------------
 let defaultCategories = [
-  // {name:'Todas', id: uuid.v4()},
+  {name:'Todas', id: uuid.v4()},
   {name:'Comida', id: uuid.v4()},
   {name:'Servicios', id: uuid.v4()},
   {name:'Salidas', id: uuid.v4()},
