@@ -205,9 +205,7 @@ const filters = (e) =>{
     filterType.value = 'Todas';
     atr = 'category'
   }
-  console.log(operationsFiltered)
   operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
-  console.log(operationsFiltered)
   e.target.value === 'Todas' ? printOperations(operations) : printOperations(operationsFiltered);
 }
 
@@ -389,7 +387,7 @@ const updateCategoriesList = () => {
     categoryItem.innerHTML = `
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <span class="tag is-primary is-light">${categories[i].name}</span>
+        <span class="tag is-primary is-light">${categories[i].name !== "Todas" ? categories[i].name : false}</span>
       </div>
       <div class="column is-narrow has-text"
         <p class="is-fullwidth has-text-right-tablet">
@@ -528,7 +526,7 @@ let defaultCategories = [
 // Start with all categories of local Storage
 categories = JSON.parse(localStorage.getItem("categories"));
 
-if(!categories || categories.length === 0){
+if(!categories || categories === null){
   localStorage.setItem('categories', JSON.stringify(defaultCategories));
   categories = JSON.parse(localStorage.getItem('categories'));
   setValueCategoriesSelect(categories);
