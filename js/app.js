@@ -57,16 +57,13 @@ btnReportes.addEventListener('click', () => {
 })
 // --------------- END OF NAVBAR -----------------
 
-// --------------- START OF NEW OPERATION -----------------
-let categories = [
-  // {id: uuid.v4(), name:'Todas'},
-  {name:'Comida', id: uuid.v4()},
-  {name:'Servicios', id: uuid.v4()},
-  {name:'Salidas', id: uuid.v4()},
-  {name:'Educación', id: uuid.v4()},
-  {name:'Transporte', id: uuid.v4()},
-  {name:'Trabajo', id: uuid.v4()}];
+const withOperations = document.getElementById('with-operations');
+const noOperations = document.getElementById('no-operations');
+let operations = [];
+operations = JSON.parse(localStorage.getItem('operations'));
+let categories = [];
 
+// --------------- START OF NEW OPERATION -----------------
 // NEW OPERATION: DATE INPUT
 const dateInput = document.getElementById('date-input');
 const filterDate = document.getElementById('filter-date');
@@ -107,12 +104,7 @@ balanceSection.style.display = 'block';
 
 // NEW OPERATION: ADD NEW OPERATION
 
-const withOperations = document.getElementById('with-operations');
-const noOperations = document.getElementById('no-operations');
-
 const btnAcceptNewOperation = document.getElementById('acceptNewOperation');
-
-let operations = [];
 
 // Form inputs
 const description = document.getElementById('description');
@@ -129,7 +121,7 @@ const printOperations = (operations)=>{
       const codeOperation = document.createElement('div');
       codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns">
           <div class="column is-3 description-style">${operations[i].description}</div> 
-          <div class="column is-3 category-style">${operations[i].category[0].name}</div>
+          <div class="column is-3 category-style">${operations[i].category}</div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
           <div class="column is-2 has-text-right ${operations[i].type === 'gain' ? 'gain-style' : 'expense-style'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
           <div class="column is-2 has-text-right">
@@ -151,17 +143,6 @@ const printOperations = (operations)=>{
       
       withOperations.append(codeOperation)
   }
-}
-
-// Start with all operations of local Storage
-operations = JSON.parse(localStorage.getItem('operations'));
-if(!operations || operations.length === 0){
-  withOperations.style.display = 'none';
-  noOperations.style.display = 'block';
-} else{
-  withOperations.style.display = 'block';
-  noOperations.style.display = 'none';
-  printOperations(operations);
 }
 
 // Create new operation in JS
@@ -210,11 +191,11 @@ if(filterDisplay === false){
 })
 
 // Categorias y Tipos filtros
-let operationsFiltered = [...operations];
 const filterType = document.getElementById('filter-type');
 const filterCategories = document.getElementById('filter-categories');
 
 const filters = (e) =>{
+  let operationsFiltered = [...operations];
   let atr = '';
   if(e.target.id === 'filter-type'){
     operationsFiltered = [...operations];
@@ -233,38 +214,38 @@ filterType.addEventListener('change', (e) => {filters(e)});
 
 // Filter de fecha
 filterDate.addEventListener('change', (e) =>{
-let result = operations.filter(operation => operation.date === e.target.value);
-printOperations(result);
+  let result = operations.filter(operation => operation.date === e.target.value);
+  printOperations(result);
 })
 
 // Filter Ordenar por
 const filterOrder = document.getElementById('filter-order');
 
 filterOrder.addEventListener('change', ()=>{
-let newArr = [...operations];
-if(filterOrder.value === 'a-z'){
-  newArr.sort((a, b) => a.description > b.description ? 1 : -1)
-}
-if(filterOrder.value === 'z-a'){
-  newArr.sort((a, b) => a.description < b.description ? 1 : -1)
-}
-if(filterOrder.value === 'more-recent'){
-  newArr.sort((a, b) => a.date < b.date ? 1 : -1)
-}
-if(filterOrder.value === 'less-recent'){
-  newArr.sort((a, b) => a.date > b.date ? 1 : -1)
-}
-if(filterOrder.value === 'more-amount'){
-  newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
-}
-if(filterOrder.value === 'less-amount'){
-  newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
-}
-printOperations(newArr)
+  let newArr = [...operations];
+  if(filterOrder.value === 'a-z'){
+    newArr.sort((a, b) => a.description > b.description ? 1 : -1)
+  }
+  if(filterOrder.value === 'z-a'){
+    newArr.sort((a, b) => a.description < b.description ? 1 : -1)
+  }
+  if(filterOrder.value === 'more-recent'){
+    newArr.sort((a, b) => a.date < b.date ? 1 : -1)
+  }
+  if(filterOrder.value === 'less-recent'){
+    newArr.sort((a, b) => a.date > b.date ? 1 : -1)
+  }
+  if(filterOrder.value === 'more-amount'){
+    newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
+  }
+  if(filterOrder.value === 'less-amount'){
+    newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
+  }
+  printOperations(newArr)
 })
 // --------------- END OF FILTERS -----------------
 
-// --------------- START OF DELETE AND EDIT OPERATIONS -----------------
+// ------ START OF DELETE AND EDIT OPERATIONS ------
 // Delete operations
 const deleteOperation = (idOperation) => {
   operations = operations.filter(operation => operation.id !== idOperation);
@@ -329,7 +310,7 @@ const editOperation = (idOperation) =>{
 
 // --------------- START OF CATEGORIES -----------------
 // DOM
-const categoriesSelect = document.getElementById('filter-categories');
+// const categoriesSelect = document.getElementById('filter-categories');
 const inputCategories = document.getElementById('category-name');
 const categoriesList = document.getElementById('categories-list');
 const btnAddCategory = document.getElementById('btn-add-category');
@@ -343,29 +324,29 @@ const editCategoriesOpOptions = document.getElementById('edit-categories-op-sele
 
 
 // Print categories on select filter
-const setValueCategoriesSelect = () => {
-  categoriesSelect.innerHTML = '';
+const setValueCategoriesSelect = (categories) => {
+  filterCategories.innerHTML = '';
   categories.forEach((category, index) =>
-    (categoriesSelect.options[index] = new Option(category.name, category.id))
-)};
+    filterCategories.options[index] = new Option(category.name, category.name))
+};
 
-setValueCategoriesSelect();
-
-const newOpCategoriesSelect = () => {
+const newOpCategoriesSelect = (categories) => {
   categoryOp.innerHTML = '';
-  categories.forEach((category, index) =>
-    (categoryOp.options[index] = new Option(category.name, category.id))
-)};
 
-newOpCategoriesSelect();
+  for (let i = 1; i < categories.length; i++) {
+    if (categories[i].name !== 'Todas') {
+      categoryOp.options[i] = new Option(categories[i].name, categories[i].name)
+    }
+  }
 
-const editCategoriesOpSelect = () => {
+  // categories.forEach((category, index) => categoryOp.options[index] = new Option(category.name, category.name))
+};
+
+const editCategoriesOpSelect = (categories) => {
   editCategoriesOpOptions.innerHTML = '';
   categories.forEach((category, index) =>
-    (editCategoriesOpOptions.options[index] = new Option(category.name, category.id))
+    editCategoriesOpOptions.options[index] = new Option(category.name, category.id)
 )};
-
-editCategoriesOpSelect();
 
 // Add new category
 btnAddCategory.addEventListener("click", () => {
@@ -377,15 +358,16 @@ btnAddCategory.addEventListener("click", () => {
   }
 
   categories.push({id: uuid.v4(), name:newCategory.charAt(0).toUpperCase() + newCategory.slice(1)});
+
   localStorage.setItem('categories', JSON.stringify(categories));
   const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));  
-  setValueCategoriesSelect(categories);
-  updateCategoriesList(categories);
-  newOpCategoriesSelect(categories);
-  editCategoriesOpSelect(categories);
+
+  setValueCategoriesSelect(categoriesGetStorage);
+  updateCategoriesList(categoriesGetStorage);
+  newOpCategoriesSelect(categoriesGetStorage);
+  editCategoriesOpSelect(categoriesGetStorage);
 
   inputCategories.value = '';
-
 });
 
 // --- KeyCode on new category input ---
@@ -400,6 +382,8 @@ const updateCategoriesList = () => {
   categoriesList.innerHTML = '';
 
   for (let i = 0; i < categories.length; i++) {
+    if(categories[i].name !== 'Todas'){
+
     const categoryItem = document.createElement('div');
     categoryItem.classList.add('mb-3');
     categoryItem.innerHTML = `
@@ -432,9 +416,8 @@ const updateCategoriesList = () => {
     }
 
     categoriesList.append(categoryItem);
-}}
-
-updateCategoriesList();
+  }}
+}
 
 // --- KeyCode on edit categories input ---
 inputEditCategory.addEventListener("keyup", function (event) {
@@ -447,32 +430,28 @@ inputEditCategory.addEventListener("keyup", function (event) {
 const editCategory = (idCategory) => {
   const index = categories.findIndex((category) => category.id === idCategory);
 
-  inputEditCategory.value = categories[index]}
+  inputEditCategory.value = categories[index].name
 
   btnCancelEditCategory.addEventListener('click', () => {
     editCategorySection.style.display = 'none';
     categoriasSection.style.display = 'block';
-});
+  });
 
-btnEditCategory.addEventListener('click', () => {
-  const renameCategory = {
-    id: category.id,
-    name: inputEditCategory.value
-  };
+  btnEditCategory.addEventListener('click', () => {
+    const renameCategory = inputEditCategory.value;
 
-  categories[editCategory] = renameCategory;
-  localStorage.setItem('categories', JSON.stringify(categories));
-  const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
-  setValueCategoriesSelect(categoriesGetStorage);
-  updateCategoriesList(categoriesGetStorage);
-  newOpCategoriesSelect(categoriesGetStorage);
-  editCategoriesOpSelect(categoriesGetStorage);
+    categories[index].name = renameCategory;
+    localStorage.setItem('categories', JSON.stringify(categories));
+    const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
+    setValueCategoriesSelect(categoriesGetStorage);
+    updateCategoriesList(categoriesGetStorage);
+    newOpCategoriesSelect(categoriesGetStorage);
+    editCategoriesOpSelect(categoriesGetStorage);
 
-  editCategorySection.style.display = 'none';
-  categoriasSection.style.display = 'block';
-})
-
-editCategory()
+    editCategorySection.style.display = 'none';
+    categoriasSection.style.display = 'block';
+  })
+};
 
 // Delete category
 const deleteCategory = (idCategory) => {
@@ -481,40 +460,6 @@ const deleteCategory = (idCategory) => {
   const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
   updateCategoriesList(categoriesGetStorage);
 }
-deleteCategory();
-
-// const deleteCategory = (category) => {
-//   const categoryName = categories.find((elem) => elem.id === category);
-//   const value = categories.findIndex((elem) => elem.id === category);
-//   if (value >= 0) {
-//     categories.splice(value, 1);
-//     localStorage.setItem('categories', JSON.stringify(categories));
-//     const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
-//     setValueCategoriesSelect(categoriesGetStorage);
-//     updateCategoriesList(categoriesGetStorage);
-//     newOpCategoriesSelect(categoriesGetStorage);
-//     editCategoriesOpSelect(categoriesGetStorage);
-//   }
-//   operations.forEach(() => {
-//     const index = operations.findIndex((operation) => operation.category === categoryName);
-//     if (index >= 0) {
-//       operations.splice(index, 1);
-//       localStorage.setItem('operations', JSON.stringify(operations))
-//     }
-//     printOperations(operations);
-//   });
-// };
-
-// Start with all categories of local Storage
-
-categories = JSON.parse(localStorage.getItem("categoriesGetStorage")) ?? categories;
-
-  setValueCategoriesSelect(categories);
-  updateCategoriesList(categories);
-  newOpCategoriesSelect(categories);
-  editCategoriesOpSelect(categories);
-
-
 // -------------- END OF CATEGORIES ---------------------------
 
 // --------------- START OF REPORTES -----------------
@@ -570,3 +515,42 @@ const balance = () =>{
 
 balance()
 // --------------- END OF BALANCES -----------------
+
+// --------------- START WITH LOCAL STORAGE -----------------
+let defaultCategories = [
+  {name:'Todas', id: uuid.v4()},
+  {name:'Comida', id: uuid.v4()},
+  {name:'Servicios', id: uuid.v4()},
+  {name:'Salidas', id: uuid.v4()},
+  {name:'Educación', id: uuid.v4()},
+  {name:'Transporte', id: uuid.v4()},
+  {name:'Trabajo', id: uuid.v4()}];
+
+// Start with all categories of local Storage
+categories = JSON.parse(localStorage.getItem("categories"));
+
+if(!categories || categories === null){
+  localStorage.setItem('categories', JSON.stringify(defaultCategories));
+  categories = JSON.parse(localStorage.getItem('categories'));
+  setValueCategoriesSelect(categories);
+  updateCategoriesList(categories);
+  newOpCategoriesSelect(categories);
+  editCategoriesOpSelect(categories);
+} else{
+  setValueCategoriesSelect(categories);
+  updateCategoriesList(categories);
+  newOpCategoriesSelect(categories);
+  editCategoriesOpSelect(categories);
+}
+
+// Start with all operations of local Storage
+operations = JSON.parse(localStorage.getItem('operations'));
+if(!operations || operations.length === 0){
+  withOperations.style.display = 'none';
+  noOperations.style.display = 'block';
+} else{
+  withOperations.style.display = 'block';
+  noOperations.style.display = 'none';
+  printOperations(operations);
+}
+// --------------- END WITH LOCAL STORAGE -----------------
