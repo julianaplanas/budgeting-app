@@ -60,6 +60,7 @@ btnReportes.addEventListener('click', () => {
 const withOperations = document.getElementById('with-operations');
 const noOperations = document.getElementById('no-operations');
 let operations = [];
+operations = JSON.parse(localStorage.getItem('operations'));
 let categories = [];
 
 // --------------- START OF NEW OPERATION -----------------
@@ -190,11 +191,11 @@ if(filterDisplay === false){
 })
 
 // Categorias y Tipos filtros
-let operationsFiltered = [...operations];
 const filterType = document.getElementById('filter-type');
 const filterCategories = document.getElementById('filter-categories');
 
 const filters = (e) =>{
+  let operationsFiltered = [...operations];
   let atr = '';
   if(e.target.id === 'filter-type'){
     operationsFiltered = [...operations];
@@ -204,7 +205,9 @@ const filters = (e) =>{
     filterType.value = 'Todas';
     atr = 'category'
   }
+  console.log(operationsFiltered)
   operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
+  console.log(operationsFiltered)
   e.target.value === 'Todas' ? printOperations(operations) : printOperations(operationsFiltered);
 }
 
@@ -213,34 +216,34 @@ filterType.addEventListener('change', (e) => {filters(e)});
 
 // Filter de fecha
 filterDate.addEventListener('change', (e) =>{
-let result = operations.filter(operation => operation.date === e.target.value);
-printOperations(result);
+  let result = operations.filter(operation => operation.date === e.target.value);
+  printOperations(result);
 })
 
 // Filter Ordenar por
 const filterOrder = document.getElementById('filter-order');
 
 filterOrder.addEventListener('change', ()=>{
-let newArr = [...operations];
-if(filterOrder.value === 'a-z'){
-  newArr.sort((a, b) => a.description > b.description ? 1 : -1)
-}
-if(filterOrder.value === 'z-a'){
-  newArr.sort((a, b) => a.description < b.description ? 1 : -1)
-}
-if(filterOrder.value === 'more-recent'){
-  newArr.sort((a, b) => a.date < b.date ? 1 : -1)
-}
-if(filterOrder.value === 'less-recent'){
-  newArr.sort((a, b) => a.date > b.date ? 1 : -1)
-}
-if(filterOrder.value === 'more-amount'){
-  newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
-}
-if(filterOrder.value === 'less-amount'){
-  newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
-}
-printOperations(newArr)
+  let newArr = [...operations];
+  if(filterOrder.value === 'a-z'){
+    newArr.sort((a, b) => a.description > b.description ? 1 : -1)
+  }
+  if(filterOrder.value === 'z-a'){
+    newArr.sort((a, b) => a.description < b.description ? 1 : -1)
+  }
+  if(filterOrder.value === 'more-recent'){
+    newArr.sort((a, b) => a.date < b.date ? 1 : -1)
+  }
+  if(filterOrder.value === 'less-recent'){
+    newArr.sort((a, b) => a.date > b.date ? 1 : -1)
+  }
+  if(filterOrder.value === 'more-amount'){
+    newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
+  }
+  if(filterOrder.value === 'less-amount'){
+    newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
+  }
+  printOperations(newArr)
 })
 // --------------- END OF FILTERS -----------------
 
@@ -326,14 +329,20 @@ const editCategoriesOpOptions = document.getElementById('edit-categories-op-sele
 const setValueCategoriesSelect = (categories) => {
   filterCategories.innerHTML = '';
   categories.forEach((category, index) =>
-    filterCategories.options[index] = new Option(category.name)
-)};
+    filterCategories.options[index] = new Option(category.name, category.name))
+};
 
 const newOpCategoriesSelect = (categories) => {
   categoryOp.innerHTML = '';
-  categories.forEach((category, index) =>
-    (categoryOp.options[index] = new Option(category.name))
-)};
+
+  // for (let i = 1; i < categories.length; i++) {
+  //   if (categories[i].name !== 'Todas') {
+  //     categoryOp.options[i] = new Option(categories[i].name, categories[i].name)
+  //   }
+  // }
+
+  categories.forEach((category, index) => categoryOp.options[index] = new Option(category.name, category.name))
+};
 
 const editCategoriesOpSelect = (categories) => {
   editCategoriesOpOptions.innerHTML = '';
@@ -518,7 +527,7 @@ let defaultCategories = [
 
 // Start with all categories of local Storage
 categories = JSON.parse(localStorage.getItem("categories"));
-console.log(categories)
+
 if(!categories || categories.length === 0){
   localStorage.setItem('categories', JSON.stringify(defaultCategories));
   categories = JSON.parse(localStorage.getItem('categories'));
