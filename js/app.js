@@ -164,6 +164,7 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
     clearOperations();
     reportesCanvas();
     balance();
+    resumenReportes()
     
     newOperationSection.style.display = 'none';
     balanceSection.style.display = 'block';
@@ -481,20 +482,62 @@ const reportesCanvas = () =>{
 
 reportesCanvas();
 
-// Total per category
-// const categories = ['education', 'work'];
+// Resumen section
+operations = JSON.parse(localStorage.getItem('operations'));
+categories = JSON.parse(localStorage.getItem("categories"));
 
-// const arr = [];
-// for (let i = 0; i < categories.length; i++) {
-//   const arrExpense = operations.filter(element => element.category === categories[i] && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
-//   const arrGain = operations.filter(element => element.category === categories[i] && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
-//   arr.push({name: categories[i], gain: arrGain, expense: arrExpense});
-// }
+const catMoreEarnings = document.getElementById('catMoreEarnings');
+const amountCatMoreEarnings = document.getElementById('amountCatMoreEarnings');
+const catMoreExpense = document.getElementById('catMoreExpense');
+const amountCatMoreExpense = document.getElementById('amountCatMoreExpense');
+const catMoreBalance = document.getElementById('catMoreBalance');
+const amountCatMoreBalance = document.getElementById('amountCatMoreBalance');
+const reportesCat = document.getElementById('reportes-categorias');
 
-// // console.log(arr);
+const resumenReportes = () =>{
+  const arr = [];
+  for (let i = 0; i < categories.length; i++) {
+    const arrExpense = operations.filter(element => element.category === categories[i].name && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+    const arrGain = operations.filter(element => element.category === categories[i].name && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+    const arrBalance = arrGain - arrExpense;
+    arr.push({name: categories[i].name, gain: arrGain, expense: arrExpense, balance: arrBalance});
+  }
+  
+  let gainCat = Math.max(...arr.map(value => value.gain));
+  let expenseCat = Math.max(...arr.map(value => value.expense));
+  let balanceCat = Math.max(...arr.map(value => value.balance));
+  amountCatMoreEarnings.innerHTML = gainCat;
+  amountCatMoreExpense.innerHTML = expenseCat;
+  amountCatMoreBalance.innerHTML = balanceCat
 
-// const result = Math.max(...arr.map(value => value.gain));
-// console.log(result);
+  arr.forEach(element => {
+    element.gain === gainCat ? catMoreEarnings.innerHTML = element.name : false
+  });
+  arr.forEach(element => {
+    element.expense === expenseCat ? catMoreExpense.innerHTML = element.name : false
+  });
+  arr.forEach(element => {
+    element.balance === balanceCat ? catMoreBalance.innerHTML = element.name : false
+  });
+
+  arr.forEach(element => {
+    if(element.gain !== 0 && element.expense !== 0){
+      const totalCat = document.createElement('div');
+      totalCat.classList.add('columns', 'is-vcentered', 'is-mobile');
+      totalCat.innerHTML =
+       `<div class="column">
+          <h3 class="has-text-weight-semibold">${element.name}</h3>
+        </div>
+        <div class="column gain-style has-text-right">+${element.gain}</div>
+        <div class="column expense-style has-text-right">-${element.expense}</div>
+        <div class="column has-text-right">${element.balance}</div>`
+        reportesCat.append(totalCat)
+      }
+    });
+}
+
+resumenReportes()
+
 // --------------- END OF REPORTES -----------------
 
 
