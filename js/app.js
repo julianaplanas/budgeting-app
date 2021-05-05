@@ -521,6 +521,7 @@ const reportesCategoria = () =>{
     element.balance === balanceCat ? catMoreBalance.innerHTML = element.name : false
   });
 
+  reportesCat.innerHTML = '';
   arr.forEach(element => {
     if(element.gain === 0 && element.expense === 0){
       return false
@@ -592,6 +593,7 @@ const reportesMonth = () =>{
     element.expense === expenseMonth ? monthMoreExpense.innerHTML = element.monthFull : false
   });
 
+  reportesMonthSection.innerHTML = ''
   totalMonth.forEach(element => {
     if(element.earning === 0 && element.expense === 0){
       return false
