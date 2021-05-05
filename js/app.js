@@ -164,6 +164,8 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
     clearOperations();
     reportesCanvas();
     balance();
+    reportesCategoria()
+    reportesMonth()
     
     newOperationSection.style.display = 'none';
     balanceSection.style.display = 'block';
@@ -481,20 +483,131 @@ const reportesCanvas = () =>{
 
 reportesCanvas();
 
-// Total per category
-// const categories = ['education', 'work'];
+// By Category
+operations = JSON.parse(localStorage.getItem('operations'));
+categories = JSON.parse(localStorage.getItem("categories"));
 
-// const arr = [];
-// for (let i = 0; i < categories.length; i++) {
-//   const arrExpense = operations.filter(element => element.category === categories[i] && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
-//   const arrGain = operations.filter(element => element.category === categories[i] && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
-//   arr.push({name: categories[i], gain: arrGain, expense: arrExpense});
-// }
+const catMoreEarnings = document.getElementById('catMoreEarnings');
+const amountCatMoreEarnings = document.getElementById('amountCatMoreEarnings');
+const catMoreExpense = document.getElementById('catMoreExpense');
+const amountCatMoreExpense = document.getElementById('amountCatMoreExpense');
+const catMoreBalance = document.getElementById('catMoreBalance');
+const amountCatMoreBalance = document.getElementById('amountCatMoreBalance');
+const reportesCat = document.getElementById('reportes-categorias');
 
-// // console.log(arr);
+const reportesCategoria = () =>{
+  const arr = [];
+  for (let i = 0; i < categories.length; i++) {
+    const arrExpense = operations.filter(element => element.category === categories[i].name && element.type === 'expense').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+    const arrGain = operations.filter(element => element.category === categories[i].name && element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
+    const arrBalance = arrGain - arrExpense;
+    arr.push({name: categories[i].name, gain: arrGain, expense: arrExpense, balance: arrBalance});
+  }
+  
+  let gainCat = Math.max(...arr.map(value => value.gain));
+  let expenseCat = Math.max(...arr.map(value => value.expense));
+  let balanceCat = Math.max(...arr.map(value => value.balance));
+  amountCatMoreEarnings.innerHTML = gainCat;
+  amountCatMoreExpense.innerHTML = expenseCat;
+  amountCatMoreBalance.innerHTML = balanceCat
 
-// const result = Math.max(...arr.map(value => value.gain));
-// console.log(result);
+  arr.forEach(element => {
+    element.gain === gainCat ? catMoreEarnings.innerHTML = element.name : false
+  });
+  arr.forEach(element => {
+    element.expense === expenseCat ? catMoreExpense.innerHTML = element.name : false
+  });
+  arr.forEach(element => {
+    element.balance === balanceCat ? catMoreBalance.innerHTML = element.name : false
+  });
+
+  arr.forEach(element => {
+    if(element.gain !== 0 && element.expense !== 0){
+      const totalCat = document.createElement('div');
+      totalCat.classList.add('columns', 'is-vcentered', 'is-mobile');
+      totalCat.innerHTML =
+       `<div class="column">
+          <h3 class="has-text-weight-semibold">${element.name}</h3>
+        </div>
+        <div class="column gain-style has-text-right">+${element.gain}</div>
+        <div class="column expense-style has-text-right">-${element.expense}</div>
+        <div class="column has-text-right">${element.balance}</div>`
+        reportesCat.append(totalCat)
+      }
+    });
+}
+
+reportesCategoria()
+
+// By Month
+const monthMoreEarnings = document.getElementById('monthMoreEarnings');
+const amountMonthMoreEarnings = document.getElementById('amountMonthMoreEarnings');
+const monthMoreExpense = document.getElementById('monthMoreExpense');
+const amountMonthMoreExpense = document.getElementById('amountMonthMoreExpense');
+const reportesMonthSection = document.getElementById('reportes-month');
+
+
+const reportesMonth = () =>{
+  let totalMonth = [];
+  for (let m = 0; m <= 12; m++) {
+    let month = new Date(2021, m, 04);
+    let itemReport = {
+      month: month.getMonth() +1,
+      monthFull : '',
+      earning: 0,
+      expense: 0,
+      balance: 0,
+    }
+    operations.forEach((operation) =>{
+      let date = new Date(operation.date);
+      if(m === date.getMonth()){
+        if(operation.type === 'gain'){
+          itemReport.earning += parseFloat(operation.amount)
+          itemReport.monthFull = operation.date
+        } else{
+          itemReport.expense += parseFloat(operation.amount)
+          itemReport.monthFull = operation.date
+        }
+      }
+    });
+    itemReport.balance = itemReport.earning - itemReport.expense;
+    if(itemReport.earning !== 0 || itemReport.expense !== 0){
+      totalMonth.push(itemReport)
+    }
+  }
+  let gainMonth = Math.max(...totalMonth.map(value => value.earning));
+  let expenseMonth = Math.max(...totalMonth.map(value => value.expense));
+  // let balanceMonth = Math.max(...totalMonth.map(value => value.balance));
+  amountMonthMoreEarnings.innerHTML = gainMonth;
+  amountMonthMoreExpense.innerHTML = expenseMonth;
+
+  totalMonth.forEach(element => {
+    element.earning === gainMonth ? monthMoreEarnings.innerHTML = element.monthFull : false
+  });
+  totalMonth.forEach(element => {
+    element.expense === expenseMonth ? monthMoreExpense.innerHTML = element.monthFull : false
+  });
+
+  totalMonth.forEach(element => {
+    if(element.earning === 0 && element.expense === 0){
+      return false
+    } else{
+      const totalMonth = document.createElement('div')
+      totalMonth.classList.add('columns', 'is-vcentered', 'is-mobile');
+      totalMonth.innerHTML =
+       `<div class="column">
+          <h3 class="has-text-weight-semibold">${element.monthFull}</h3>
+        </div>
+        <div class="column gain-style has-text-right">+${element.earning}</div>
+        <div class="column expense-style has-text-right">-${element.expense}</div>
+        <div class="column has-text-right">${element.balance}</div>`
+        reportesMonthSection.append(totalMonth)
+    }
+  });
+}
+
+reportesMonth()
+
 // --------------- END OF REPORTES -----------------
 
 

@@ -414,7 +414,85 @@
                   </div>
                 </div>
                 <div id="with-reports" class="display">
-                  <p>Hay operaciones</p>
+                  <!-- Start of resumen -->
+                  <article class="section mb-5">
+                    <h4 class="title is-size-4 mb-5 pb-4">Resumen</h4>
+  
+                    <div class="columns is-mobile">
+                      <div class="column is-6 has-text-weight-semibold">Categoría con mayor ganancia</div>
+                      <div class="column is-3 has-text-right category-style" id="catMoreEarnings"></div>
+                      <div class="column is-3 has-text-right gain-style">+<span class="gain-style" id="amountCatMoreEarnings"></span></div>
+                    </div>
+  
+                    <div class="columns is-mobile">
+                      <div class="column is-6 has-text-weight-semibold">Categoría con mayor gasto</div>
+                      <div class="column is-3 has-text-right category-style" id="catMoreExpense"></div>
+                      <div class="column is-3 has-text-right expense-style">-<span class="expense-style" id="amountCatMoreExpense"></span></div>
+                    </div>
+  
+                    <div class="columns is-mobile">
+                      <div class="column is-6 has-text-weight-semibold">Categoría con mayor balance</div>
+                      <div class="column is-3 has-text-right category-style" id="catMoreBalance"></div>
+                      <div class="column is-3 has-text-right" id="amountCatMoreBalance"></div>
+                    </div>
+  
+                    <div class="columns is-mobile">
+                      <div class="column is-6 has-text-weight-semibold">Mes con mayor ganancia</div>
+                      <div class="column is-3 has-text-right" id="monthMoreEarnings"></div>
+                      <div class="column is-3 has-text-right gain-style">+<span class="gain-style" id="amountMonthMoreEarnings"></span></div>
+                    </div>
+  
+                    <div class="columns is-mobile">
+                      <div class="column is-6 has-text-weight-semibold">Mes con mayor gasto</div>
+                      <div class="column is-3 has-text-right" id="monthMoreExpense"></div>
+                      <div class="column is-3 has-text-right expense-style">-<span class="expense-style" id="amountMonthMoreExpense"></span></div>
+                    </div>
+                  </article>
+
+                  <!-- Start of Totales por categoría -->
+                  <article class="section mb-5">
+                    <h4 class="title is-size-4 mb-5 pb-4">Totales por categoría</h4>
+                    
+                    <div id="reportes-categorias">
+                      <div class="columns is-mobile">
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold">Categoría</h4>
+                        </div>
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold has-text-right">Ganancias</h4>
+                        </div>
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold has-text-right">Gastos</h4>
+                        </div>
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold has-text-right">Balance</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
+                  <!-- Start of Totales por mes -->
+                  <article class="section mb-5">
+                    <h4 class="title is-size-4 mb-5 pb-4">Totales por mes</h4>
+                    
+                    <div id="reportes-month">
+                      <div class="columns is-mobile">
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold">Mes</h4>
+                        </div>
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold has-text-right">Ganancias</h4>
+                        </div>
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold has-text-right">Gastos</h4>
+                        </div>
+                        <div class="column">
+                          <h4 class="has-text-weight-semibold has-text-right">Balance</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+
                 </div>
               </div>
             </div>
