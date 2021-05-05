@@ -521,8 +521,11 @@ const reportesCategoria = () =>{
     element.balance === balanceCat ? catMoreBalance.innerHTML = element.name : false
   });
 
+  reportesCat.innerHTML = '';
   arr.forEach(element => {
-    if(element.gain !== 0 && element.expense !== 0){
+    if(element.gain === 0 && element.expense === 0){
+      return false
+    } else{
       const totalCat = document.createElement('div');
       totalCat.classList.add('columns', 'is-vcentered', 'is-mobile');
       totalCat.innerHTML =
@@ -533,8 +536,8 @@ const reportesCategoria = () =>{
         <div class="column expense-style has-text-right">-${element.expense}</div>
         <div class="column has-text-right">${element.balance}</div>`
         reportesCat.append(totalCat)
-      }
-    });
+    }
+  });
 }
 
 reportesCategoria()
@@ -559,14 +562,16 @@ const reportesMonth = () =>{
       balance: 0,
     }
     operations.forEach((operation) =>{
-      let date = new Date(operation.date);
-      if(m === date.getMonth()){
+      let datex = new Date(operation.date);
+      let date = `${parseInt(datex.getMonth() +1) < 10 ? '0' + parseInt(datex.getMonth() +1) : parseInt(datex.getMonth() +1)}/${datex.getFullYear()}`
+
+      if(m === datex.getMonth()){
         if(operation.type === 'gain'){
           itemReport.earning += parseFloat(operation.amount)
-          itemReport.monthFull = operation.date
+          itemReport.monthFull = date
         } else{
           itemReport.expense += parseFloat(operation.amount)
-          itemReport.monthFull = operation.date
+          itemReport.monthFull = date
         }
       }
     });
@@ -577,7 +582,7 @@ const reportesMonth = () =>{
   }
   let gainMonth = Math.max(...totalMonth.map(value => value.earning));
   let expenseMonth = Math.max(...totalMonth.map(value => value.expense));
-  // let balanceMonth = Math.max(...totalMonth.map(value => value.balance));
+  
   amountMonthMoreEarnings.innerHTML = gainMonth;
   amountMonthMoreExpense.innerHTML = expenseMonth;
 
@@ -588,6 +593,7 @@ const reportesMonth = () =>{
     element.expense === expenseMonth ? monthMoreExpense.innerHTML = element.monthFull : false
   });
 
+  reportesMonthSection.innerHTML = ''
   totalMonth.forEach(element => {
     if(element.earning === 0 && element.expense === 0){
       return false
