@@ -555,14 +555,19 @@ let profits;
 let spending;
 
 const reportesCanvas = () =>{
-  profits = operations.some(el => el.type === 'gain');
-  spending = operations.some(el => el.type === 'expense');
-  if(!operations || operations.length === 0 || !profits || !spending){
+  if(!operations || operations.length === 0){
   withReports.classList.add('display');
   noReports.classList.remove('display');
 } else{
-  withReports.classList.remove('display');
-  noReports.classList.add('display');
+  profits = operations.some(el => el.type === 'gain');
+  spending = operations.some(el => el.type === 'expense');
+  if(!profits || !spending){
+    withReports.classList.add('display');
+    noReports.classList.remove('display');
+  } else{
+    withReports.classList.remove('display');
+    noReports.classList.add('display');
+  }
 }}
 
 reportesCanvas();
