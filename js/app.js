@@ -204,6 +204,7 @@ const getOperations = () =>{
     withOperations.style.display = 'block';
     noOperations.style.display = 'none';
     printOperations(operations);
+    balance()
   }
 }
 
@@ -567,6 +568,8 @@ const reportesCanvas = () =>{
   } else{
     withReports.classList.remove('display');
     noReports.classList.add('display');
+    reportesCategoria()
+    reportesMonth()
   }
 }}
 
@@ -620,8 +623,6 @@ const reportesCategoria = () =>{
     }
   });
 }
-
-reportesCategoria()
 
 // REPORTES BY MONTH
 const reportesMonth = () =>{
@@ -685,8 +686,6 @@ const reportesMonth = () =>{
     }
   });
 }
-
-reportesMonth()
 // --------------- END OF REPORTES -----------------
 
 
@@ -700,6 +699,4 @@ const balance = () =>{
 
   balanceBalance.innerHTML = `$${earnings - expenses}`;
 }
-
-balance()
 // --------------- END OF BALANCES -----------------
