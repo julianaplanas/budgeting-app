@@ -551,10 +551,12 @@ const deleteCategory = (idCategory) => {
 
 // --------------- START OF REPORTES -----------------
 // SHOW OR UNSHOW REPORT SECTION
-const profits = operations.some(el => el.type === 'gain');
-const spending = operations.some(el => el.type === 'expense');
+let profits; 
+let spending;
 
 const reportesCanvas = () =>{
+  profits = operations.some(el => el.type === 'gain');
+  spending = operations.some(el => el.type === 'expense');
   if(!operations || operations.length === 0 || !profits || !spending){
   withReports.classList.add('display');
   noReports.classList.remove('display');
