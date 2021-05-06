@@ -200,6 +200,7 @@ const getOperations = () =>{
   if(!operations || operations.length === 0){
     withOperations.style.display = 'none';
     noOperations.style.display = 'block';
+    operations = [];
   } else{
     withOperations.style.display = 'block';
     noOperations.style.display = 'none';
@@ -220,7 +221,7 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
       category: categoryOp.value,
       date: dateInput.value
   }
-
+  
   operations.push(newOp);
   localStorage.setItem('operations', JSON.stringify(operations));
   const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
