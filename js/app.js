@@ -60,8 +60,16 @@ btnReportes.addEventListener('click', () => {
 const withOperations = document.getElementById('with-operations');
 const noOperations = document.getElementById('no-operations');
 let operations = [];
-operations = JSON.parse(localStorage.getItem('operations'));
 let categories = [];
+let defaultCategories = [
+  {name:'Comida', id: uuid.v4()},
+  {name:'Servicios', id: uuid.v4()},
+  {name:'Salidas', id: uuid.v4()},
+  {name:'Educación', id: uuid.v4()},
+  {name:'Transporte', id: uuid.v4()},
+  {name:'Trabajo', id: uuid.v4()}];
+categories = JSON.parse(localStorage.getItem("categories"));
+operations = JSON.parse(localStorage.getItem('operations'));
 
 // --------------- START OF NEW OPERATION -----------------
 // NEW OPERATION: DATE INPUT
@@ -175,6 +183,7 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
 // --------------- END OF NEW OPERATIONS -----------------
 
 // --------------- START OF FILTERS -----------------
+
 // Show and unshow filters box
 const toggleFilters = document.getElementById('toggle-filters');
 const filtersBox = document.getElementById('filters');
@@ -192,59 +201,102 @@ if(filterDisplay === false){
 }
 })
 
-// Categorias y Tipos filtros
-const filterType = document.getElementById('filter-type');
-const filterCategories = document.getElementById('filter-categories');
+const filterByType = (type, operations) => operations.filter((operation) => operation.type === type);
 
-const filters = (e) =>{
-  let operationsFiltered = [...operations];
-  let atr = '';
-  if(e.target.id === 'filter-type'){
-    operationsFiltered = [...operations];
-    filterCategories.value = 'Todas';
-    atr = 'type';
+const filterByCategory = (category, operations) => operations.filter((operation) => operation.category === category);
+
+const filterByDate = (date, operations) => operations.filter((operation) => new Date(operation.date).getTime() >= new Date(date).getTime());
+
+const filterByLessRecent = (operations, order) => {
+  const arr = [...operations];
+  let result;
+  if(order === 'ASC'){
+    result = arr.sort((a, b) => (a.date > b.date ? 1 : -1));
   } else{
-    filterType.value = 'Todas';
-    atr = 'category'
+    result = arr.sort((a, b) => (a.date < b.date ? 1 : -1));
   }
-  operationsFiltered = operationsFiltered.filter(operation => operation[atr] === e.target.value);
-  e.target.value === 'Todas' ? printOperations(operations) : printOperations(operationsFiltered);
+  return result
 }
 
-filterCategories.addEventListener('change', (e) => {filters(e)});
-filterType.addEventListener('change', (e) => {filters(e)});
+const filterbyLessAmount = (operations, order) => {
+  const arr = [...operations];
+  let result;
+  if (order === "ASC") {
+    result = arr.sort((a, b) =>
+      Number(a.amount) > Number(b.amount) ? 1 : -1
+    );
+  } else {
+    result = arr.sort((a, b) =>
+      Number(a.amount) < Number(b.amount) ? 1 : -1
+    );
+  }
+  return result;
+};
 
-// Filter de fecha
-filterDate.addEventListener('change', (e) =>{
-  let result = operations.filter(operation => operation.date === e.target.value);
-  printOperations(result);
-})
+const filterAZ_ZA = (operations, order) => {
+  const arr = [...operations];
+  let result;
+  if (order === "A-Z") {
+    result = arr.sort((a, b) => (a.description > b.description ? 1 : -1));
+  } else {
+    result = arr.sort((a, b) => (a.description < b.description ? 1 : -1));
+  }
+  return result;
+};
 
-// Filter Ordenar por
+const filterType = document.getElementById('filter-type');
+const filterCategories = document.getElementById('filter-categories');
 const filterOrder = document.getElementById('filter-order');
 
-filterOrder.addEventListener('change', ()=>{
-  let newArr = [...operations];
-  if(filterOrder.value === 'a-z'){
-    newArr.sort((a, b) => a.description > b.description ? 1 : -1)
+const filterOperations = () => {
+  const type = filterType.value;
+  const category = filterCategories.value;
+  const date = filterDate.value;
+  const order = filterOrder.value;
+
+  let operationsFilter = operations
+
+  if (type !== "Todas") {
+    operationsFilter = filterByType(type, operationsFilter);
   }
-  if(filterOrder.value === 'z-a'){
-    newArr.sort((a, b) => a.description < b.description ? 1 : -1)
+
+  if (category !== "Todas") {
+    operationsFilter = filterByCategory(category, operationsFilter);
   }
-  if(filterOrder.value === 'more-recent'){
-    newArr.sort((a, b) => a.date < b.date ? 1 : -1)
+
+  operationsFilter = filterByDate(date, operationsFilter);
+
+  switch (order) {
+    case "Más reciente":
+      operationsFilter = filterByLessRecent(operationsFilter, "DESC");
+      break;
+    case "Menos reciente":
+      operationsFilter = filterByLessRecent(operationsFilter, "ASC");
+      break;
+    case "Mayor monto":
+      operationsFilter = filterbyLessAmount(operationsFilter, "DESC");
+      break;
+    case "Menor monto":
+      operationsFilter = filterbyLessAmount(operationsFilter, "ASC");
+      break;
+    case "A/Z":
+      operationsFilter = filterAZ_ZA(operationsFilter, "A-Z");
+      break;
+    case "Z/A":
+      operationsFilter = filterAZ_ZA(operationsFilter, "Z-A");
+      break;
+    default:
+      break;
   }
-  if(filterOrder.value === 'less-recent'){
-    newArr.sort((a, b) => a.date > b.date ? 1 : -1)
-  }
-  if(filterOrder.value === 'more-amount'){
-    newArr.sort((a, b) => Number(a.amount) < Number(b.amount) ? 1 : -1)
-  }
-  if(filterOrder.value === 'less-amount'){
-    newArr.sort((a, b) => Number(a.amount) > Number(b.amount) ? 1 : -1)
-  }
-  printOperations(newArr)
-})
+
+  printOperations(operationsFilter)
+};
+
+filterType.addEventListener("change", filterOperations);
+filterCategories.addEventListener("change", filterOperations);
+filterDate.addEventListener("change", filterOperations);
+filterOrder.addEventListener("change", filterOperations);
+
 // --------------- END OF FILTERS -----------------
 
 // ------ START OF DELETE AND EDIT OPERATIONS ------
@@ -327,28 +379,17 @@ const editCategoriesOpOptions = document.getElementById('edit-categories-op-sele
 
 // Print categories on select filter
 const setValueCategoriesSelect = (categories) => {
-  filterCategories.innerHTML = '';
-  categories.forEach((category, index) =>
-    filterCategories.options[index] = new Option(category.name, category.name))
-};
-
-const newOpCategoriesSelect = (categories) => {
-  categoryOp.innerHTML = '';
-
-  for (let i = 1; i < categories.length; i++) {
-    if (categories[i].name !== 'Todas') {
-      categoryOp.options[i] = new Option(categories[i].name, categories[i].name)
-    }
+  categoryOp.innerHTML = "";
+  filterCategories.innerHTML = `<option value="Todas">Todas</option>`;
+  for (let i = 0; i < categories.length; i++) {
+    const categoria = `
+    <option value="${categories[i].name}">${categories[i].name}</option>
+    `;
+    categoryOp.insertAdjacentHTML("beforeend", categoria);
+    editCategoriesOpOptions.insertAdjacentHTML("beforeend", categoria);
+    filterCategories.insertAdjacentHTML("beforeend", categoria);
   }
-
-  // categories.forEach((category, index) => categoryOp.options[index] = new Option(category.name, category.name))
 };
-
-const editCategoriesOpSelect = (categories) => {
-  editCategoriesOpOptions.innerHTML = '';
-  categories.forEach((category, index) =>
-    editCategoriesOpOptions.options[index] = new Option(category.name, category.id)
-)};
 
 // Add new category
 btnAddCategory.addEventListener("click", () => {
@@ -366,8 +407,6 @@ btnAddCategory.addEventListener("click", () => {
 
   setValueCategoriesSelect(categoriesGetStorage);
   updateCategoriesList(categoriesGetStorage);
-  newOpCategoriesSelect(categoriesGetStorage);
-  editCategoriesOpSelect(categoriesGetStorage);
 
   inputCategories.value = '';
 });
@@ -384,7 +423,7 @@ const updateCategoriesList = () => {
   categoriesList.innerHTML = '';
 
   for (let i = 0; i < categories.length; i++) {
-    if(categories[i].name !== 'Todas'){
+    // if(categories[i].name !== 'Todas'){
 
     const categoryItem = document.createElement('div');
     categoryItem.classList.add('mb-3');
@@ -418,7 +457,8 @@ const updateCategoriesList = () => {
     }
 
     categoriesList.append(categoryItem);
-  }}
+  // }
+  }
 }
 
 // --- KeyCode on edit categories input ---
@@ -447,8 +487,8 @@ const editCategory = (idCategory) => {
     const categoriesGetStorage = JSON.parse(localStorage.getItem('categories'));
     setValueCategoriesSelect(categoriesGetStorage);
     updateCategoriesList(categoriesGetStorage);
-    newOpCategoriesSelect(categoriesGetStorage);
-    editCategoriesOpSelect(categoriesGetStorage);
+    // newOpCategoriesSelect(categoriesGetStorage);
+    // editCategoriesOpSelect(categoriesGetStorage);
 
     editCategorySection.style.display = 'none';
     categoriasSection.style.display = 'block';
@@ -484,8 +524,8 @@ const reportesCanvas = () =>{
 reportesCanvas();
 
 // By Category
-operations = JSON.parse(localStorage.getItem('operations'));
 categories = JSON.parse(localStorage.getItem("categories"));
+operations = JSON.parse(localStorage.getItem('operations'));
 
 const catMoreEarnings = document.getElementById('catMoreEarnings');
 const amountCatMoreEarnings = document.getElementById('amountCatMoreEarnings');
@@ -636,40 +676,31 @@ balance()
 // --------------- END OF BALANCES -----------------
 
 // --------------- START WITH LOCAL STORAGE -----------------
-let defaultCategories = [
-  {name:'Todas', id: uuid.v4()},
-  {name:'Comida', id: uuid.v4()},
-  {name:'Servicios', id: uuid.v4()},
-  {name:'Salidas', id: uuid.v4()},
-  {name:'Educación', id: uuid.v4()},
-  {name:'Transporte', id: uuid.v4()},
-  {name:'Trabajo', id: uuid.v4()}];
 
 // Start with all categories of local Storage
-categories = JSON.parse(localStorage.getItem("categories"));
-
-if(!categories || categories === null){
-  localStorage.setItem('categories', JSON.stringify(defaultCategories));
-  categories = JSON.parse(localStorage.getItem('categories'));
-  setValueCategoriesSelect(categories);
-  updateCategoriesList(categories);
-  newOpCategoriesSelect(categories);
-  editCategoriesOpSelect(categories);
-} else{
-  setValueCategoriesSelect(categories);
-  updateCategoriesList(categories);
-  newOpCategoriesSelect(categories);
-  editCategoriesOpSelect(categories);
+const getLocalStorage = () =>{
+  categories = JSON.parse(localStorage.getItem("categories"));
+  if(!categories || categories === null){
+    localStorage.setItem('categories', JSON.stringify(defaultCategories));
+    categories = JSON.parse(localStorage.getItem('categories'));
+    setValueCategoriesSelect(categories);
+    updateCategoriesList(categories);
+  } else{
+    setValueCategoriesSelect(categories);
+    updateCategoriesList(categories);
+  }
+  
+  // Start with all operations of local Storage
+  operations = JSON.parse(localStorage.getItem('operations'));
+  if(!operations || operations.length === 0){
+    withOperations.style.display = 'none';
+    noOperations.style.display = 'block';
+  } else{
+    withOperations.style.display = 'block';
+    noOperations.style.display = 'none';
+    printOperations(operations);
+  }
 }
 
-// Start with all operations of local Storage
-operations = JSON.parse(localStorage.getItem('operations'));
-if(!operations || operations.length === 0){
-  withOperations.style.display = 'none';
-  noOperations.style.display = 'block';
-} else{
-  withOperations.style.display = 'block';
-  noOperations.style.display = 'none';
-  printOperations(operations);
-}
+getLocalStorage()
 // --------------- END WITH LOCAL STORAGE -----------------
