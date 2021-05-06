@@ -1,0 +1,138 @@
+:root{
+    --fontText: 'Quicksand', sans-serif;
+    --sizeText: 1em;
+    --sizeSubtitle: 1.5em;
+    --sizeMiddle: 2.3em;
+    --sizeTitle: 3em;
+    --weightText: 400;
+    --weightTitle: 700;
+    --colorText: #fff;
+    --colorBackground: #9754C9;
+    --colorBox: #432860;
+    --colorDetails: #884DC0;
+    --colorGastos: red;
+    --colorGanancias: green;
+}
+
+*{
+    font-family: var(--fontText);
+}
+
+/* NAVBAR */
+
+.navbar{
+    padding: 30px;
+}
+
+.navbar, .navbar a{
+    background-color: var(--colorBackground);
+    color: var(--colorText);
+}
+
+.brand-title, .brand-logo i{
+    font-weight: var(--weightTitle);
+    font-size: var(--sizeTitle);
+}
+
+.nav-button{
+    font-size: var(--sizeSubtitle);
+    font-weight: var(--weightTitle);
+}
+
+.brand-logo{
+    margin: 0 10px;
+}
+
+.brand-title{
+    margin-left: 15px;
+}
+
+.navbar a:hover{
+    color: var(--colorBox);
+}
+
+.navbar-end a:hover{
+    border-radius: 10px;
+}
+
+.display{
+    display: none;
+}
+
+/* CATEGORIAS */
+
+.subtitle{
+    font-size: var(--sizeMiddle);
+    font-weight: var(--weightTitle);
+}
+
+.add-category{
+    background-color: var(--colorDetails);
+    color: var(--colorText);
+    font-weight: var(--weightText);
+}
+
+/* NEW OPERATION */
+
+.new-op-buttons{
+    font-family: var(--fontText);
+    margin-top: 50px;
+}
+
+.add-new-op-button{
+    font-family: var(--fontText);
+    background-color: var(--colorDetails);
+    color: var(--colorText);
+}
+
+/* BALANCE */
+
+.section-name{
+    font-size: var(--sizeMiddle);
+}
+
+/* FILTERS */ 
+
+label {
+    color: #363636;
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: .5em;
+}
+
+/* OPERATIONS */
+
+button {
+    font-family: var(--fontText);
+}
+
+.new-operation {
+    background-color: var(--colorDetails);
+    color: #fff;
+}
+
+.description-style{
+    font-weight: 800;
+}
+
+.category-style{
+    border: none;
+    color: var(--colorGanancias);
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.edit-op, .delete-op{
+    font-size: 0.8rem;
+}
+
+.gain-style{
+    color: var(--colorGanancias);
+    font-weight: 800;
+}
+
+.expense-style{
+    color: var(--colorGastos);
+    font-weight: 800;
+}
