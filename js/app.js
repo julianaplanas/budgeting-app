@@ -194,23 +194,6 @@ const printOperations = (operations)=>{
   }
 }
 
-// GET OPERATIONS FROM LOCAL STORAGE
-const getOperations = () =>{
-  operations = JSON.parse(localStorage.getItem('operations'));
-  if(!operations || operations.length === 0){
-    withOperations.style.display = 'none';
-    noOperations.style.display = 'block';
-    operations = [];
-  } else{
-    withOperations.style.display = 'block';
-    noOperations.style.display = 'none';
-    printOperations(operations);
-    balance()
-  }
-}
-
-getOperations()
-
 // CREATE NEW OPERATION
 btnAcceptNewOperation.addEventListener('click', ()=>{
   const newOp = {
@@ -701,3 +684,19 @@ const balance = () =>{
   balanceBalance.innerHTML = `$${earnings - expenses}`;
 }
 // --------------- END OF BALANCES -----------------
+
+// GET OPERATIONS FROM LOCAL STORAGE
+const getOperations = () =>{
+  operations = JSON.parse(localStorage.getItem('operations'));
+  if(!operations || operations.length === 0){
+    withOperations.style.display = 'none';
+    noOperations.style.display = 'block';
+    operations = [];
+  } else{
+    withOperations.style.display = 'block';
+    noOperations.style.display = 'none';
+    printOperations(operations);
+    balance()
+  }
+}
+getOperations()
