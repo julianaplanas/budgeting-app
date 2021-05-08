@@ -578,7 +578,7 @@ reportesCanvas();
 
 // REPORTES BY CATEGORY
 categories = JSON.parse(localStorage.getItem("categories"));
-operations = JSON.parse(localStorage.getItem('operations'));
+operations = JSON.parse(localStorage.getItem('operations')) ?? [];
 
 const reportesCategoria = () =>{
   const arr = [];
