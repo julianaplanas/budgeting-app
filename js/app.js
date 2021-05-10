@@ -169,13 +169,13 @@ const printOperations = (operations)=>{
   for (let i = 0; i < operations.length; i++) {
       const codeOperation = document.createElement('div');
       codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns">
-          <div class="column is-3 description-style">${operations[i].description}</div> 
-          <div class="column is-3 category-style">${operations[i].category}</div>
+          <div class="column is-3 has-text-weight-semibold">${operations[i].description}</div> 
+          <div class="column is-3"><span class="tag is-warning is-light">${operations[i].category}</span></div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
-          <div class="column is-2 has-text-right ${operations[i].type === 'gain' ? 'gain-style' : 'expense-style'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
+          <div class="column is-2 has-text-right has-text-weight-semibold ${operations[i].type === 'gain' ? 'has-text-success ' : 'has-text-danger'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
           <div class="column is-2 has-text-right">
-            <a class="edit-op">Editar</a>
-            <a class="delete-op">Eliminar</a>
+            <a class="edit-op is-size-7 link-style">Editar</a>
+            <a class="delete-op is-size-7 link-style">Eliminar</a>
           </div> 
       </div>`
 
@@ -351,6 +351,8 @@ const deleteOperation = (idOperation) => {
   if(operations.length < 1){
     withOperations.style.display = 'none';
     noOperations.style.display = 'block';
+    withReports.classList.add('display');
+    noReports.classList.remove('display');
   }
 }
 
@@ -447,12 +449,12 @@ const updateCategoriesList = () => {
     categoryItem.innerHTML = `
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <span class="tag is-primary is-light">${categories[i].name}</span>
+        <span class="tag is-warning is-light">${categories[i].name}</span>
       </div>
       <div class="column is-narrow has-text"
         <p class="is-fullwidth has-text-right-tablet">
-          <a href="#" class="mr-4 is-size-7 edit-link">Editar</a>
-          <a href="#" class="is-size-7 delete-link">Eliminar</a>
+          <a href="#" class="mr-4 is-size-7 edit-link link-style">Editar</a>
+          <a href="#" class="is-size-7 delete-link link-style">Eliminar</a>
         </p>
       </div>
     </div>`;
@@ -535,29 +537,8 @@ const deleteCategory = (idCategory) => {
 // -------------- END OF CATEGORIES ---------------------------
 
 // --------------- START OF REPORTES -----------------
-// SHOW OR UNSHOW REPORT SECTION
 let profits; 
 let spending;
-
-const reportesCanvas = () =>{
-  if(!operations || operations.length === 0){
-  withReports.classList.add('display');
-  noReports.classList.remove('display');
-} else{
-  profits = operations.some(el => el.type === 'gain');
-  spending = operations.some(el => el.type === 'expense');
-  if(!profits || !spending){
-    withReports.classList.add('display');
-    noReports.classList.remove('display');
-  } else{
-    withReports.classList.remove('display');
-    noReports.classList.add('display');
-    reportesCategoria()
-    reportesMonth()
-  }
-}}
-
-reportesCanvas();
 
 // REPORTES BY CATEGORY
 categories = JSON.parse(localStorage.getItem("categories"));
@@ -580,13 +561,13 @@ const reportesCategoria = () =>{
   amountCatMoreBalance.innerHTML = balanceCat
 
   arr.forEach(element => {
-    element.gain === gainCat ? catMoreEarnings.innerHTML = element.name : false
+    element.gain === gainCat ? catMoreEarnings.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
   });
   arr.forEach(element => {
-    element.expense === expenseCat ? catMoreExpense.innerHTML = element.name : false
+    element.expense === expenseCat ? catMoreExpense.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
   });
   arr.forEach(element => {
-    element.balance === balanceCat ? catMoreBalance.innerHTML = element.name : false
+    element.balance === balanceCat ? catMoreBalance.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
   });
 
   reportesCat.innerHTML = '';
@@ -598,10 +579,10 @@ const reportesCategoria = () =>{
       totalCat.classList.add('columns', 'is-vcentered', 'is-mobile');
       totalCat.innerHTML =
        `<div class="column">
-          <h3 class="has-text-weight-semibold">${element.name}</h3>
+          <h3 class="has-text-weight-semibold"><span class="tag is-primary is-light">${element.name}</span></h3>
         </div>
-        <div class="column gain-style has-text-right">+${element.gain}</div>
-        <div class="column expense-style has-text-right">-${element.expense}</div>
+        <div class="column has-text-success has-text-weight-semibold has-text-right">+${element.gain}</div>
+        <div class="column has-text-danger has-text-weight-semibold has-text-right">-${element.expense}</div>
         <div class="column has-text-right">${element.balance}</div>`
         reportesCat.append(totalCat)
     }
@@ -663,8 +644,8 @@ const reportesMonth = () =>{
        `<div class="column">
           <h3 class="has-text-weight-semibold">${element.monthFull}</h3>
         </div>
-        <div class="column gain-style has-text-right">+${element.earning}</div>
-        <div class="column expense-style has-text-right">-${element.expense}</div>
+        <div class="column has-text-success has-text-weight-semibold has-text-right">+${element.earning}</div>
+        <div class="column has-text-danger has-text-weight-semibold has-text-right">-${element.expense}</div>
         <div class="column has-text-right">${element.balance}</div>`
         reportesMonthSection.append(totalMonth)
     }
@@ -700,3 +681,25 @@ const getOperations = () =>{
   }
 }
 getOperations()
+
+// SHOW OR UNSHOW REPORT SECTION
+const reportesCanvas = () =>{
+  console.log(operations)
+  if(!operations || operations.length === 0){
+  withReports.classList.add('display');
+  noReports.classList.remove('display');
+} else{
+  profits = operations.some(el => el.type === 'gain');
+  spending = operations.some(el => el.type === 'expense');
+  if(!profits || !spending){
+    withReports.classList.add('display');
+    noReports.classList.remove('display');
+  } else{
+    withReports.classList.remove('display');
+    noReports.classList.add('display');
+    reportesCategoria()
+    reportesMonth()
+  }
+}}
+
+reportesCanvas();
