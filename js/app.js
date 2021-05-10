@@ -3,6 +3,7 @@
 const btnBalance = document.getElementById('btnBalance');
 const btnCategorias = document.getElementById('btnCategorias');
 const btnReportes = document.getElementById('btnReportes');
+const btnBrandLogo = document.getElementById('brand-logo')
 // Sections
 const balanceSection = document.getElementById('balanceSection');
 const categoriasSection = document.getElementById('categoriasSection');
@@ -104,6 +105,13 @@ btnBalance.addEventListener('click', ()=>{
     newOperationSection.style.display = 'none';
 })
 
+btnBrandLogo.addEventListener('click', ()=>{
+  balanceSection.style.display = 'block';
+  categoriasSection.style.display = 'none';
+  reportesSection.style.display = 'none';
+  newOperationSection.style.display = 'none';
+})
+
 btnCategorias.addEventListener('click', () =>{
     balanceSection.style.display = 'none';
     categoriasSection.style.display = 'block';
@@ -136,8 +144,13 @@ const day = new Date().getDate();
 const month = new Date().getMonth() + 1;
 const year = new Date().getFullYear();
 
-dateInput.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
-filterDate.value = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+const todayDate = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
+
+dateInput.value = todayDate;
+filterDate.value = todayDate;
+dateInput.setAttribute("max", todayDate)
+filterDate.setAttribute("max", todayDate)
+editDate.setAttribute("max", todayDate)
 
 // Clear operations
 const clearOperations = () =>{
