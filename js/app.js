@@ -65,9 +65,9 @@ const monthMoreExpense = document.getElementById('monthMoreExpense');
 const amountMonthMoreExpense = document.getElementById('amountMonthMoreExpense');
 const reportesMonthSection = document.getElementById('reportes-month');
 // Reportes balance
-const earningsBalance = document.getElementById('earnings');
-const expensesBalance = document.getElementById('expenses');
-const balanceBalance = document.getElementById('balance');
+const earningsBalance = document.getElementById('earnings-balance');
+const expensesBalance = document.getElementById('expenses-balance');
+const balanceBalance = document.getElementById('balance-balance');
 // --------------- END OF HTML ELEMENTS -----------------
 
 // --------------- START OF BURGER NAVBAR -----------------
@@ -168,7 +168,7 @@ const printOperations = (operations)=>{
   withOperations.innerHTML = '';
   for (let i = 0; i < operations.length; i++) {
       const codeOperation = document.createElement('div');
-      codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns">
+      codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns is-mobile">
           <div class="column is-3 has-text-weight-semibold">${operations[i].description}</div> 
           <div class="column is-3"><span class="tag is-warning is-light">${operations[i].category}</span></div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
@@ -677,20 +677,20 @@ const getOperations = () =>{
     withOperations.style.display = 'block';
     noOperations.style.display = 'none';
     printOperations(operations);
-    balance()
+    // balance()
   }
 }
 getOperations()
 
 // SHOW OR UNSHOW REPORT SECTION
 const reportesCanvas = () =>{
-  console.log(operations)
   if(!operations || operations.length === 0){
   withReports.classList.add('display');
   noReports.classList.remove('display');
 } else{
   profits = operations.some(el => el.type === 'gain');
   spending = operations.some(el => el.type === 'expense');
+  balance()
   if(!profits || !spending){
     withReports.classList.add('display');
     noReports.classList.remove('display');
