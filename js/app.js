@@ -653,7 +653,6 @@ const reportesMonth = () =>{
 }
 // --------------- END OF REPORTES -----------------
 
-
 // --------------- START OF BALANCES -----------------
 const balance = () =>{
   let earnings = operations.filter(element => element.type === 'gain').reduce((inicial, current) => Number(inicial) + Number(current.amount), 0);
