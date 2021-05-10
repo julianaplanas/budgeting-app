@@ -7,11 +7,9 @@
     --weightText: 400;
     --weightTitle: 700;
     --colorText: #fff;
-    --colorBackground: #9754C9;
-    --colorBox: #432860;
-    --colorDetails: #884DC0;
-    --colorGastos: red;
-    --colorGanancias: green;
+    --colorBackground: #AAC6FC;
+    --colorButtons: #EEBED3;
+    --colorTextDetails: #F6E049;
 }
 
 *{
@@ -48,47 +46,37 @@
 }
 
 .navbar a:hover{
-    color: var(--colorBox);
+    color: black;
 }
 
 .navbar-end a:hover{
     border-radius: 10px;
 }
 
+/* DISPLAY SECTIONS */
+
 .display{
     display: none;
 }
 
-/* CATEGORIAS */
+/* SUBTITLES */
 
-.subtitle{
+.subtitle, .section-name{
     font-size: var(--sizeMiddle);
     font-weight: var(--weightTitle);
 }
 
-.add-category{
-    background-color: var(--colorDetails);
-    color: var(--colorText);
+/* BUTTONS */
+
+.button{
+    background-color: var(--colorTextDetails);
+    color: black;
     font-weight: var(--weightText);
+    border: none;
 }
 
-/* NEW OPERATION */
-
-.new-op-buttons{
-    font-family: var(--fontText);
-    margin-top: 50px;
-}
-
-.add-new-op-button{
-    font-family: var(--fontText);
-    background-color: var(--colorDetails);
-    color: var(--colorText);
-}
-
-/* BALANCE */
-
-.section-name{
-    font-size: var(--sizeMiddle);
+.button:hover{
+    background-color: var(--colorBackground);
 }
 
 /* FILTERS */ 
@@ -101,38 +89,12 @@ label {
     margin-bottom: .5em;
 }
 
-/* OPERATIONS */
+/* LINKS STYLE */
 
-button {
-    font-family: var(--fontText);
+.link-style{
+    color: black;
 }
 
-.new-operation {
-    background-color: var(--colorDetails);
-    color: #fff;
-}
-
-.description-style{
-    font-weight: 800;
-}
-
-.category-style{
-    border: none;
-    color: var(--colorGanancias);
-    font-size: 0.8rem;
-    font-weight: 800;
-}
-
-.edit-op, .delete-op{
-    font-size: 0.8rem;
-}
-
-.gain-style{
-    color: var(--colorGanancias);
-    font-weight: 800;
-}
-
-.expense-style{
-    color: var(--colorGastos);
-    font-weight: 800;
+.link-style:hover{
+    color: var(--colorBackground);
 }
