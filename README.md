@@ -8,6 +8,8 @@ Este proyecto fue desarrollado en el marco del curso de FrontEnd de ADA. Se util
 
 ## Podés ver la versión deployada [en Github](prinsepunk.github.io/ahorradas/).
 
+![imagen](./assets/img/ahorradas.png)
+
 <br>
 
 Se utilizaron las siguientes dependencias:
