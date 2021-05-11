@@ -30,6 +30,10 @@ const filterType = document.getElementById('filter-type');
 const filterCategories = document.getElementById('filter-categories');
 const filterDate = document.getElementById('filter-date');
 const filterOrder = document.getElementById('filter-order');
+// Delete operations
+const modalDeleteOp = document.getElementById('modalDeleteOp');
+const btnConfirmDeleteOp = document.getElementById('btnConfirmDeleteOp');
+const btnCancelDeleteOp = document.getElementById('btnCancelDeleteOp');
 // Edit operations
 const editOperationSection = document.getElementById('editOperationSection');
 const editDescription = document.getElementById('editDescription');
@@ -48,6 +52,10 @@ const inputEditCategory = document.getElementById('edit-category-input');
 const btnEditCategory = document.getElementById('edit-category-button');
 const btnCancelEditCategory = document.getElementById('cancel-category-button');
 const editCategoriesOpOptions = document.getElementById('edit-categories-op-select');
+// Delete categories
+const modalDeleteCat = document.getElementById('modalDeleteCat');
+const btnConfirmDeleteCat = document.getElementById('btnConfirmDeleteCat');
+const btnCancelDeleteCat = document.getElementById('btnCancelDeleteCat');
 // Reportes section
 const noReports = document.getElementById('no-reports');
 const withReports = document.getElementById('with-reports');
@@ -200,7 +208,14 @@ const printOperations = (operations)=>{
       }
       
       deleteButton.onclick = () => {
-        deleteOperation(operations[i].id);
+        modalDeleteOp.classList.add('is-active');
+        btnConfirmDeleteOp.addEventListener('click', () =>{
+          deleteOperation(operations[i].id);
+          modalDeleteOp.classList.remove('is-active');
+        })
+        btnCancelDeleteOp.addEventListener('click', () =>{
+          modalDeleteOp.classList.remove('is-active');
+        })
       }
       
       withOperations.append(codeOperation)
@@ -367,6 +382,7 @@ filterOrder.addEventListener("change", filterOperations);
 // ------ START OF DELETE AND EDIT OPERATIONS ------
 // DELETE OPERATIONS
 const deleteOperation = (idOperation) => {
+
   operations = operations.filter(operation => operation.id !== idOperation);
   localStorage.setItem('operations', JSON.stringify(operations));
   const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
@@ -496,7 +512,14 @@ const updateCategoriesList = () => {
     }
 
     deleteAction.onclick = () => {
-      deleteCategory(categories[i].id);
+      modalDeleteCat.classList.add('is-active');
+        btnConfirmDeleteCat.addEventListener('click', () =>{
+          deleteCategory(categories[i].id);
+          modalDeleteCat.classList.remove('is-active');
+        })
+        btnCancelDeleteCat.addEventListener('click', () =>{
+          modalDeleteCat.classList.remove('is-active');
+        })
     }
 
     categoriesList.append(categoryItem);
