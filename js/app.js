@@ -35,7 +35,7 @@ const editOperationSection = document.getElementById('editOperationSection');
 const editDescription = document.getElementById('editDescription');
 const editAmount = document.getElementById('editAmount');
 const editType = document.getElementById('editType');
-const editCategoriesOp = document.getElementById('editCategoriesOp');
+const editCategoriesOp = document.getElementById('edit-categories-op-select');
 const editDate = document.getElementById('editDate');
 const cancelEditOperation = document.getElementById('cancelEditOperation');
 const editNewOperation = document.getElementById('editNewOperation');
@@ -183,12 +183,12 @@ const printOperations = (operations)=>{
       const codeOperation = document.createElement('div');
       codeOperation.innerHTML = `<div id="${operations[i].id}" class="columns is-mobile">
           <div class="column is-3 has-text-weight-semibold">${operations[i].description}</div> 
-          <div class="column is-3"><span class="tag is-warning is-light">${operations[i].category}</span></div>
+          <div class="column is-2"><span class="tag is-warning is-light">${operations[i].category}</span></div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
-          <div class="column is-2 has-text-right has-text-weight-semibold ${operations[i].type === 'gain' ? 'has-text-success ' : 'has-text-danger'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
-          <div class="column is-2 has-text-right">
-            <a class="edit-op is-size-7 link-style">Editar</a>
-            <a class="delete-op is-size-7 link-style">Eliminar</a>
+          <div class="column is-2 has-text-right has-text-weight-semibold ${operations[i].type === 'gain' ? 'has-text-success ' : 'has-text-danger'}">${operations[i].type === 'gain' ? '+$' : '-$'}${operations[i].amount.replace(/^0+/, '')}</div>
+          <div class="column is-3 has-text-right">
+            <a class="edit-op mr-4 is-size-6 link-style">Editar</a>
+            <a class="delete-op is-size-6 link-style">Eliminar</a>
           </div> 
       </div>`
 
@@ -217,23 +217,34 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
       category: categoryOp.value,
       date: dateInput.value
   }
-  
-  operations.push(newOp);
-  localStorage.setItem('operations', JSON.stringify(operations));
-  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
-  printOperations(operationsLocalStorage);
 
+  let danger = true;
+  if(amount.value <= 0){
+    amount.classList.add('is-danger')
+    danger = true;
+  } else{
+    amount.classList.remove('is-danger');
+    danger = false;
+  }
+  
+  if(danger === false){
+    operations.push(newOp);
+    localStorage.setItem('operations', JSON.stringify(operations));
+    const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+    printOperations(operationsLocalStorage);
+  
     clearOperations();
     reportesCanvas();
     balance();
     reportesCategoria()
     reportesMonth()
-    
+      
     newOperationSection.style.display = 'none';
     balanceSection.style.display = 'block';
     noOperations.style.display = 'none';
     withOperations.style.display = 'block';
-  })
+  }
+})
 // --------------- END OF NEW OPERATIONS -----------------
 
 // --------------- START OF FILTERS -----------------
@@ -379,7 +390,7 @@ const editOperation = (idOperation) =>{
   editDescription.value = operations[editOperation].description;
   editAmount.value = operations[editOperation].amount;
   editType.value = operations[editOperation].type;
-  // editCategoriesOp.value = operations[editOperation].category;
+  editCategoriesOp.value = operations[editOperation].category;
   editDate.value = operations[editOperation].date;
 
   cancelEditOperation.addEventListener('click', () =>{
@@ -462,12 +473,12 @@ const updateCategoriesList = () => {
     categoryItem.innerHTML = `
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <span class="tag is-warning is-light">${categories[i].name}</span>
+        <span class="tag is-warning is-light is-size-6">${categories[i].name}</span>
       </div>
       <div class="column is-narrow has-text"
         <p class="is-fullwidth has-text-right-tablet">
-          <a href="#" class="mr-4 is-size-7 edit-link link-style">Editar</a>
-          <a href="#" class="is-size-7 delete-link link-style">Eliminar</a>
+          <a href="#" class="mr-4 is-size-6 edit-link link-style">Editar</a>
+          <a href="#" class="is-size-6 delete-link link-style">Eliminar</a>
         </p>
       </div>
     </div>`;
@@ -571,7 +582,7 @@ const reportesCategoria = () =>{
   let balanceCat = Math.max(...arr.map(value => value.balance));
   amountCatMoreEarnings.innerHTML = gainCat;
   amountCatMoreExpense.innerHTML = expenseCat;
-  amountCatMoreBalance.innerHTML = balanceCat
+  amountCatMoreBalance.innerHTML = `${balanceCat > 0 ? '$' + balanceCat : balanceCat}`;
 
   arr.forEach(element => {
     element.gain === gainCat ? catMoreEarnings.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
@@ -594,9 +605,9 @@ const reportesCategoria = () =>{
        `<div class="column">
           <h3 class="has-text-weight-semibold"><span class="tag is-primary is-light">${element.name}</span></h3>
         </div>
-        <div class="column has-text-success has-text-weight-semibold has-text-right">+${element.gain}</div>
-        <div class="column has-text-danger has-text-weight-semibold has-text-right">-${element.expense}</div>
-        <div class="column has-text-right">${element.balance}</div>`
+        <div class="column has-text-success has-text-weight-semibold has-text-right">+$${element.gain}</div>
+        <div class="column has-text-danger has-text-weight-semibold has-text-right">-$${element.expense}</div>
+        <div class="column has-text-right">${element.balance > 0 ? '$' + element.balance : element.balance}</div>`
         reportesCat.append(totalCat)
     }
   });
@@ -657,9 +668,9 @@ const reportesMonth = () =>{
        `<div class="column">
           <h3 class="has-text-weight-semibold">${element.monthFull}</h3>
         </div>
-        <div class="column has-text-success has-text-weight-semibold has-text-right">+${element.earning}</div>
-        <div class="column has-text-danger has-text-weight-semibold has-text-right">-${element.expense}</div>
-        <div class="column has-text-right">${element.balance}</div>`
+        <div class="column has-text-success has-text-weight-semibold has-text-right">+$${element.earning}</div>
+        <div class="column has-text-danger has-text-weight-semibold has-text-right">-$${element.expense}</div>
+        <div class="column has-text-right">${element.balance > 0 ? '$' + element.balance : element.balance}</div>`
         reportesMonthSection.append(totalMonth)
     }
   });
