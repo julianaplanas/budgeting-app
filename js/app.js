@@ -218,23 +218,32 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
       date: dateInput.value
   }
 
+  let danger = true;
+  if(amount.value <= 0){
+    amount.classList.add('is-danger')
+    danger = true;
+  } else{
+    amount.classList.remove('is-danger');
+    danger = false;
+  }
   
+  if(danger === false){
+    operations.push(newOp);
+    localStorage.setItem('operations', JSON.stringify(operations));
+    const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
+    printOperations(operationsLocalStorage);
   
-  operations.push(newOp);
-  localStorage.setItem('operations', JSON.stringify(operations));
-  const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
-  printOperations(operationsLocalStorage);
-
-  clearOperations();
-  reportesCanvas();
-  balance();
-  reportesCategoria()
-  reportesMonth()
-    
-  newOperationSection.style.display = 'none';
-  balanceSection.style.display = 'block';
-  noOperations.style.display = 'none';
-  withOperations.style.display = 'block';
+    clearOperations();
+    reportesCanvas();
+    balance();
+    reportesCategoria()
+    reportesMonth()
+      
+    newOperationSection.style.display = 'none';
+    balanceSection.style.display = 'block';
+    noOperations.style.display = 'none';
+    withOperations.style.display = 'block';
+  }
 })
 // --------------- END OF NEW OPERATIONS -----------------
 
