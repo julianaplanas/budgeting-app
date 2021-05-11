@@ -35,7 +35,7 @@ const editOperationSection = document.getElementById('editOperationSection');
 const editDescription = document.getElementById('editDescription');
 const editAmount = document.getElementById('editAmount');
 const editType = document.getElementById('editType');
-const editCategoriesOp = document.getElementById('editCategoriesOp');
+const editCategoriesOp = document.getElementById('edit-categories-op-select');
 const editDate = document.getElementById('editDate');
 const cancelEditOperation = document.getElementById('cancelEditOperation');
 const editNewOperation = document.getElementById('editNewOperation');
@@ -185,7 +185,7 @@ const printOperations = (operations)=>{
           <div class="column is-3 has-text-weight-semibold">${operations[i].description}</div> 
           <div class="column is-3"><span class="tag is-warning is-light">${operations[i].category}</span></div>
           <div class="column is-2 has-text-right">${operations[i].date}</div>
-          <div class="column is-2 has-text-right has-text-weight-semibold ${operations[i].type === 'gain' ? 'has-text-success ' : 'has-text-danger'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount}</div>
+          <div class="column is-2 has-text-right has-text-weight-semibold ${operations[i].type === 'gain' ? 'has-text-success ' : 'has-text-danger'}">${operations[i].type === 'gain' ? '+ ' : '- '}${operations[i].amount.replace(/^0+/, '')}</div>
           <div class="column is-2 has-text-right">
             <a class="edit-op is-size-7 link-style">Editar</a>
             <a class="delete-op is-size-7 link-style">Eliminar</a>
@@ -217,23 +217,25 @@ btnAcceptNewOperation.addEventListener('click', ()=>{
       category: categoryOp.value,
       date: dateInput.value
   }
+
+  
   
   operations.push(newOp);
   localStorage.setItem('operations', JSON.stringify(operations));
   const operationsLocalStorage = JSON.parse(localStorage.getItem('operations'));
   printOperations(operationsLocalStorage);
 
-    clearOperations();
-    reportesCanvas();
-    balance();
-    reportesCategoria()
-    reportesMonth()
+  clearOperations();
+  reportesCanvas();
+  balance();
+  reportesCategoria()
+  reportesMonth()
     
-    newOperationSection.style.display = 'none';
-    balanceSection.style.display = 'block';
-    noOperations.style.display = 'none';
-    withOperations.style.display = 'block';
-  })
+  newOperationSection.style.display = 'none';
+  balanceSection.style.display = 'block';
+  noOperations.style.display = 'none';
+  withOperations.style.display = 'block';
+})
 // --------------- END OF NEW OPERATIONS -----------------
 
 // --------------- START OF FILTERS -----------------
@@ -379,7 +381,7 @@ const editOperation = (idOperation) =>{
   editDescription.value = operations[editOperation].description;
   editAmount.value = operations[editOperation].amount;
   editType.value = operations[editOperation].type;
-  // editCategoriesOp.value = operations[editOperation].category;
+  editCategoriesOp.value = operations[editOperation].category;
   editDate.value = operations[editOperation].date;
 
   cancelEditOperation.addEventListener('click', () =>{
