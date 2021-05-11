@@ -24,7 +24,7 @@
 
 .navbar, .navbar a{
     background-color: var(--colorBackground);
-    color: black;
+    color: rgb(73, 73, 73);
 }
 
 .brand-title, .brand-logo i{
@@ -46,7 +46,8 @@
 }
 
 .navbar a:hover{
-    color: var(--colorText);
+    opacity: 0.5;
+    color: rgb(73, 73, 73);
 }
 
 .navbar-end a:hover{
