@@ -154,6 +154,7 @@ const year = new Date().getFullYear();
 
 const todayDate = `${year}-${month < 10 ? '0' + month: month}-${day < 10 ? '0' + day: day}`;
 
+// Set today date as max for inputs and filters
 dateInput.value = todayDate;
 filterDate.value = todayDate;
 dateInput.setAttribute("max", todayDate)
@@ -608,13 +609,13 @@ const reportesCategoria = () =>{
   amountCatMoreBalance.innerHTML = `${balanceCat > 0 ? '$' + balanceCat : balanceCat}`;
 
   arr.forEach(element => {
-    element.gain === gainCat ? catMoreEarnings.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
+    element.gain === gainCat ? catMoreEarnings.innerHTML = `<span class="tag is-warning is-light">${element.name}</span>` : false
   });
   arr.forEach(element => {
-    element.expense === expenseCat ? catMoreExpense.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
+    element.expense === expenseCat ? catMoreExpense.innerHTML = `<span class="tag is-warning is-light">${element.name}</span>` : false
   });
   arr.forEach(element => {
-    element.balance === balanceCat ? catMoreBalance.innerHTML = `<span class="tag is-primary is-light">${element.name}</span>` : false
+    element.balance === balanceCat ? catMoreBalance.innerHTML = `<span class="tag is-warning is-light">${element.name}</span>` : false
   });
 
   reportesCat.innerHTML = '';
@@ -626,7 +627,7 @@ const reportesCategoria = () =>{
       totalCat.classList.add('columns', 'is-vcentered', 'is-mobile');
       totalCat.innerHTML =
        `<div class="column">
-          <h3 class="has-text-weight-semibold"><span class="tag is-primary is-light">${element.name}</span></h3>
+          <h3 class="has-text-weight-semibold"><span class="tag is-warning is-light">${element.name}</span></h3>
         </div>
         <div class="column has-text-success has-text-weight-semibold has-text-right">+$${element.gain}</div>
         <div class="column has-text-danger has-text-weight-semibold has-text-right">-$${element.expense}</div>
